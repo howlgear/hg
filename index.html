@@ -1,0 +1,1431 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>HowlGear - Sklep Outdoorowy</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f9fbe7;
+      color: #333;
+      line-height: 1.6;
+    }
+    header {
+      background-color: #efefef;
+      padding: 2px 2px;
+      text-align: center;
+      position: relative;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+      transition: box-shadow 0.3s ease;
+    }
+    header img {
+      width: 150px;
+      height: auto;
+      transition: transform 0.3s ease;
+    }
+    header img:hover {
+      transform: scale(1.05);
+    }
+    header h1 {
+      margin-top: 10px;
+      font-size: 28px;
+      color: #4a443b;
+    }
+    .cart-wishlist {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      display: flex;
+      gap: 20px;
+      font-size: 16px;
+      font-weight: bold;
+    }
+    .cart-wishlist span {
+      cursor: pointer;
+      color: #5a6b58;
+      transition: color 0.3s ease;
+    }
+    .cart-wishlist span:hover {
+      color: #3f4a39;
+    }
+    .cart-count, .wishlist-count {
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      background-color: #aed581;
+      color: white;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      text-align: center;
+      font-size: 12px;
+    }
+    nav {
+      background-color: #7aa178;
+      padding: 15px 0;
+      text-align: center;
+    }
+    nav a {
+      color: #f9f9ef;
+      text-decoration: none;
+      font-size: 16px;
+      padding: 8px 15px;
+      border-radius: 20px;
+      background-color: #388e3c;
+      margin: 0 5px;
+      display: inline-block;
+      transition: all 0.2s ease;
+    }
+    nav a:hover {
+      background-color: #a8c186;
+      transform: scale(1.05);
+    }
+    nav a.active {
+      background-color: #7aa178;
+      color: #fff;
+      font-weight: bold;
+      transform: scale(1.1);
+    }
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 20px;
+      min-height: 80vh;
+    }
+    /* Sekcje */
+    .section {
+      display: none;
+    }
+    .section.active {
+      display: block;
+    }
+    /* Slider */
+    .slider {
+      width: 100%;
+      overflow: hidden;
+      margin: 20px 0;
+    }
+    .slide-track {
+      display: flex;
+      width: max-content;
+      animation: scrollSlider 20s linear infinite;
+    }
+    @keyframes scrollSlider {
+      from { transform: translateX(0); }
+      to { transform: translateX(-100%); }
+    }
+    .slide {
+      min-width: 300px;
+      padding: 10px;
+      box-sizing: border-box;
+    }
+    .slide img {
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+    }
+    /* Kategorie z ikonkami */
+    .category-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: 20px;
+      justify-items: center;
+      margin: 20px 0;
+    }
+    .category-card {
+      text-align: center;
+      background-color: #fff;
+      padding: 10px;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+    .category-card:hover {
+      transform: scale(1.05);
+    }
+    .category-card img {
+      width: 80px;
+      height: auto;
+      border-radius: 8px;
+      margin-bottom: 10px;
+    }
+    .sort-container {
+      text-align: center;
+      margin: 20px 0;
+    }
+    .sort-container select {
+      padding: 10px 15px;
+      font-size: 16px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      background-color: #f5f1ea;
+      color: #4a443b;
+    }
+    .products-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 25px;
+      padding: 20px 0;
+      transition: all 0.3s ease;
+    }
+    .product {
+      background-color: #fff;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .product:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    }
+    .product img {
+      width: 100%;
+      height: auto;
+      transition: opacity 0.3s ease;
+    }
+    .product-body {
+      padding: 15px;
+    }
+    .product h3 {
+      font-size: 20px;
+      margin-bottom: 10px;
+      color: #3e362d;
+      display: flex;
+      align-items: center;
+    }
+    .product-category-icon {
+      font-size: 20px;
+      margin-right: 10px;
+    }
+    .product p.price {
+      font-weight: bold;
+      margin: 10px 0;
+      color: #5a6b58;
+    }
+    .product p.points-info {
+      font-size: 14px;
+      color: #777;
+      margin-bottom: 10px;
+    }
+    .details-panel {
+      display: none;
+      padding: 15px;
+      background-color: #f5f1ea;
+      border-top: 1px solid #e0d8cc;
+    }
+    .specifications ul {
+      list-style: none;
+      padding-left: 0;
+    }
+    .specifications li::before {
+      content: "• ";
+      color: #7aa178;
+    }
+    .gallery {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .gallery img {
+      width: 100px;
+      height: auto;
+      border-radius: 6px;
+    }
+    .btn-cart, .btn-fav {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 8px 12px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background-color 0.3s ease;
+    }
+    .btn-cart {
+      background-color: #7aa178;
+      color: #fff;
+    }
+    .btn-cart:hover {
+      background-color: #5d8a5d;
+    }
+    .btn-fav {
+      background-color: #f5f1ea;
+      margin-left: 10px;
+      color: #aaa;
+      border: 1px solid #ccc;
+    }
+    .btn-fav.liked {
+      color: red;
+      background-color: #ffe6e6;
+    }
+    footer {
+      text-align: center;
+      padding: 20px;
+      background-color: #4a443b;
+      color: #f9f9ef;
+      margin-top: 40px;
+      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+    }
+    form {
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      border: 1px solid #ddd;
+      margin-top: 20px;
+    }
+    input,
+    textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      background-color: #fdfdf9;
+    }
+    button[type="submit"] {
+      background-color: #7aa178;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button[type="submit"]:hover {
+      background-color: #5d8a5d;
+    }
+    .error {
+      color: red;
+      font-size: 0.9em;
+    }
+    .summary {
+      margin-top: 20px;
+      background: #fff;
+      padding: 15px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+    }
+    .summary h3 {
+      margin-bottom: 10px;
+      color: #3e362d;
+    }
+    .summary ul {
+      list-style: none;
+      padding-left: 0;
+    }
+    .summary li {
+      margin-bottom: 8px;
+    }
+    .summary-empty {
+      color: #aaa;
+      font-style: italic;
+    }
+    .quantity-controls {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: 10px;
+    }
+    .quantity-controls button {
+      width: 25px;
+      height: 25px;
+      font-size: 18px;
+      line-height: 25px;
+      text-align: center;
+      background-color: #eee;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+    .quantity-controls span {
+      min-width: 15px;
+      text-align: center;
+    }
+    .level {
+      margin-top: 20px;
+    }
+    .level.bronze {
+      color: #cd7f32;
+    }
+    .level.silver {
+      color: #aaa;
+    }
+    .level.gold {
+      color: gold;
+    }
+    .level.vip {
+      color: #9966cc;
+    }
+    .social-icons {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      display: flex;
+      gap: 20px;
+      z-index: 1000;
+      font-family: sans-serif;
+      font-size: 14px;
+      text-transform: uppercase;
+    }
+    .social-icons a {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background-color: #7aa178;
+      color: white;
+      padding: 10px 15px;
+      border-radius: 25px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .social-icons a:hover {
+      background-color: #5d8a5d;
+      transform: scale(1.05);
+    }
+    /* Wyszukiwarka */
+    .search-container {
+      text-align: center;
+      margin: 20px 0;
+    }
+    .search-container input {
+      width: 300px;
+      padding: 10px 15px;
+      border-radius: 25px;
+      border: 1px solid #ccc;
+      outline: none;
+    }
+    .suggestions {
+      position: absolute;
+      width: 300px;
+      max-height: 200px;
+      overflow-y: auto;
+      border: 1px solid #ccc;
+      background: #fff;
+      margin-top: 5px;
+      border-radius: 8px;
+      display: none;
+      z-index: 1000;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+    .suggestion-item {
+      padding: 10px;
+      cursor: pointer;
+    }
+    .suggestion-item:hover {
+      background-color: #f0f0f0;
+    }
+    /* Nowoczesny scrollbar */
+    .products-container::-webkit-scrollbar {
+      height: 8px;
+    }
+    .products-container::-webkit-scrollbar-thumb {
+      background-color: #a8977e;
+      border-radius: 4px;
+    }
+    .products-container::-webkit-scrollbar-track {
+      background: #f1eee0;
+    }
+    /* Ikony kategorii pod produktami */
+    .product-category-icon {
+      color: #7aa178;
+    }
+    /* Dodaj trochę więcej koloru */
+    .slider {
+      background: #ebe4d7;
+      padding: 10px 0;
+      border-radius: 10px;
+    }
+    .category-grid {
+      background: #f5f1ea;
+      padding: 15px;
+      border-radius: 10px;
+    }
+    .sort-container select {
+      background-color: #ebe4d7;
+    }
+    .main-nav a.active {
+      background-color: #5d8a5d !important;
+    }
+    .promo-section {
+      background: #ebe4d7;
+      padding: 20px;
+      border-radius: 10px;
+      margin: 20px 0;
+    }
+    .section#about, .section#contact, .section#loyalty {
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      margin-top: 20px;
+    }
+    /* Przyciski zakładek aktywne */
+    .main-nav a {
+      transition: background-color 0.2s ease, transform 0.2s ease;
+    }
+
+    /* Zoom zdjęć */
+    .product img.zoomed {
+      transform: scale(2);
+      transition: transform 0.3s ease;
+      cursor: zoom-out;
+      position: relative;
+      z-index: 1000;
+    }
+    .zoom-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+      z-index: 999;
+      justify-content: center;
+      align-items: center;
+    }
+    .zoom-overlay img {
+      max-width: 90%;
+      max-height: 90%;
+      object-fit: contain;
+      border-radius: 8px;
+      box-shadow: 0 0 20px rgba(255,255,255,0.5);
+    }
+  </style>
+</head>
+<body>
+<!-- Nagłówek -->
+<header>
+  <img src="logo.png" alt="Logo HowlGear">
+  <h1>HowlGear - Sklep Outdoorowy</h1>
+  <!-- Koszyk i Ulubione -->
+  <div class="cart-wishlist">
+    <span onclick="toggleSummary('cart')">
+      🛒 Koszyk (<span id="cartCount">0</span>)
+    </span>
+    <span onclick="toggleSummary('wishlist')">
+      ❤️ Ulubione (<span id="wishlistCount">0</span>)
+    </span>
+  </div>
+</header>
+<!-- Nawigacja z zakładkami -->
+<div class="main-nav">
+  <nav>
+    <a href="#" onclick="showSection('home')" data-section="home" class="active">Strona główna</a>
+    <a href="#" onclick="showSection('about')" data-section="about">O nas</a>
+    <a href="#" onclick="showSection('contact')" data-section="contact">Kontakt</a>
+    <a href="#" onclick="showSection('loyalty')" data-section="loyalty">Program lojalnościowy</a>
+  </nav>
+</div>
+<!-- Wyszukiwarka -->
+<div class="search-container">
+  <input type="text" id="searchInput" placeholder="Szukaj produktu..." oninput="searchProducts(this.value)">
+  <div class="suggestions" id="suggestions"></div>
+</div>
+<!-- Slider promocyjny -->
+<div class="slider">
+  <div class="slide-track" id="slideTrack">
+    <div class="slide"><img src="https://via.placeholder.com/300x150?text=Nowo ść+tygodnia" alt=""></div>
+    <div class="slide"><img src="https://via.placeholder.com/300x150?text=Rabat+do+20% " alt=""></div>
+    <div class="slide"><img src="https://via.placeholder.com/300x150?text=Zestaw+na+wiosn ę" alt=""></div>
+    <div class="slide"><img src="https://via.placeholder.com/300x150?text=Promocja+VIP " alt=""></div>
+    <div class="slide"><img src="https://via.placeholder.com/300x150?text=Zestaw+biwakowy " alt=""></div>
+  </div>
+</div>
+<!-- Kategorie z ikonkami -->
+<div class="category-grid" id="categoryGrid" style="display: flex;">
+  <div class="category-card" onclick="filterProducts('all')">
+    <img src="https://as1.ftcdn.net/v2/jpg/05/62/37/72/1000_F_562377260_b2z4aocmCS70aUlLLqKjOTbHjtD99REi.jpg " alt="Wszystkie">
+    <h4>Wszystko</h4>
+  </div>
+  <div class="category-card" onclick="filterProducts('namioty')">
+    <img src="https://as2.ftcdn.net/jpg/04/39/98/39/1000_F_439983952_CwEp0UiG5pY5JpGe7h57j8TP10taBfxD.jpg " alt="Namioty">
+    <h4>Namioty</h4>
+  </div>
+  <div class="category-card" onclick="filterProducts('hamaki')">
+    <img src="https://as1.ftcdn.net/v2/jpg/02/82/23/48/1000_F_282234838_dG5MuYO6e07rzP77uYbQgK8hHWIUztvS.jpg " alt="Hamaki">
+    <h4>Hamaki</h4>
+  </div>
+  <div class="category-card" onclick="filterProducts('spiwory')">
+    <img src="https://as1.ftcdn.net/v2/jpg/05/21/26/52/1000_F_521265259_32rSO7OnZaOvUqXlm9zP0RscdCc0CYj1.jpg " alt="Śpiwory">
+    <h4>Śpiwory</h4>
+  </div>
+  <div class="category-card" onclick="filterProducts('plecaki')">
+    <img src="https://as1.ftcdn.net/v2/jpg/05/23/10/40/1000_F_523104027_tr2Dcr4r8H57RiFvHwqzcLtJTJbJOKqV.jpg " alt="Plecaki">
+    <h4>Plecaki</h4>
+  </div>
+  <div class="category-card" onclick="filterProducts('kijki')">
+    <img src="https://as2.ftcdn.net/v2/jpg/03/36/75/77/1000_F_336757792_2nj1OG1F8e765JDzj27kbuUFQGuLguRZ.jpg " alt="Kijki">
+    <h4>Kijki</h4>
+  </div>
+  <div class="category-card" onclick="filterProducts('survival')">
+    <img src="https://as2.ftcdn.net/v2/jpg/03/22/89/19/1000_F_322891932_eODKl5SXl02d3yCmmnte1GEy8q65G89k.jpg " alt="Survival">
+    <h4>Survival</h4>
+  </div>
+  <div class="category-card" onclick="filterProducts('akcesoria')">
+    <img src="https://as2.ftcdn.net/v2/jpg/07/85/33/29/1000_F_785332903_mkYUPTHGBgTSNTnYTPyeWBpF9WgEkBkG.jpg " alt="Akcesoria biwakowe">
+    <h4>Akcesoria</h4>
+  </div>
+</div>
+
+<!-- Sekcje -->
+<main>
+  <!-- Strona główna z produktami -->
+  <section id="home" class="section active">
+    <!-- Sortowanie -->
+    <div class="sort-container">
+      <label for="sort">Sortuj:</label>
+      <select id="sort" onchange="sortProducts()">
+        <option value="default">Domyślnie</option>
+        <option value="priceAsc">Cena (rosnąco)</option>
+        <option value="priceDesc">Cena (malejąco)</option>
+        <option value="nameAsc">Nazwa (A-Z)</option>
+        <option value="nameDesc">Nazwa (Z-A)</option>
+      </select>
+    </div>
+    <!-- Produkty -->
+    <div class="products-container" id="productsContainer">
+      <!-- NAMIOTY -->
+      <div class="product" data-category="namioty" data-name="Namiot Dome 4-osobowy" data-price="600"
+           onclick="toggleDetails(this)">
+        <img src="https://as2.ftcdn.net/v2/jpg/01/38/48/05/1000_F_138480580_tj7eRrPr7FfsZJkyg93ltB9AAEjBtm7d.jpg " alt="Namiot 4-osobowy">
+        <div class="product-body">
+          <h3>Namiot Dome 4-osobowy</h3>
+          <p class="price">600 zł</p>
+          <p class="points-info">+60 pkt za zakup</p>
+          <button class="btn-cart" onclick="addToCart(event, this)">Dodaj do koszyka</button>
+          <button class="btn-fav" onclick="addToWishlist(event, this)">❤️ Dodaj do ulubionych</button>
+          <div class="details-panel">
+            <p><strong>Opis:</strong> Lekki, wodoodporny namiot idealny na weekendową wyprawę.</p>
+            <p><strong>Specyfikacja:</strong></p>
+            <ul class="specifications">
+              <li>Maksymalna ilość osób: 4</li>
+              <li>Liczba wejść: 2</li>
+              <li>Materiał: Nylon</li>
+              <li>Waga: 3 kg</li>
+            </ul>
+            <p><strong>Zdjęcia:</strong></p>
+            <div class="gallery">
+              <img src="https://as1.ftcdn.net/v2/jpg/01/39/40/04/1000_F_139400450_FcMVfadNKsmkHsDplv7odzffS5ngE3NK.jpg " alt="Zdjęcie 1">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="product" data-category="namioty" data-name="Namiot Tunelowy 2-osobowy" data-price="400"
+           onclick="toggleDetails(this)">
+        <img src="https://as1.ftcdn.net/v2/jpg/00/75/03/54/1000_F_75035440_sfsNmH786GJz2jLa5dxRKsl8CnAAD52w.jpg " alt="Namiot Tunelowy 2-osobowy">
+        <div class="product-body">
+          <h3>Namiot Tunelowy 2-osobowy</h3>
+          <p class="price">400 zł</p>
+          <p class="points-info">+40 pkt za zakup</p>
+          <button class="btn-cart" onclick="addToCart(event, this)">Dodaj do koszyka</button>
+          <button class="btn-fav" onclick="addToWishlist(event, this)">❤️ Dodaj do ulubionych</button>
+          <div class="details-panel">
+            <p><strong>Opis:</strong> Idealny namiot tunelowy na krótkie rajdy rowerowe lub piesze. Komfortowa przestrzeń.</p>
+            <p><strong>Specyfikacja:</strong></p>
+            <ul class="specifications">
+              <li>Ilość osób: 2</li>
+              <li>Materiał: Poliester</li>
+              <li>Waga: 2.2 kg</li>
+              <li>Wodoodporność: 3000 mm</li>
+            </ul>
+            <p><strong>Zdjęcia:</strong></p>
+            <div class="gallery">
+              <img src="https://as2.ftcdn.net/jpg/00/74/43/39/1000_F_74433924_z07QJNQoFwV9Ysp8qNeZoXV9M3J5W2uM.jpg" alt="Zdjęcie 1">
+              <img src="https://as2.ftcdn.net/jpg/00/74/43/73/1000_F_74437343_uUjfvhFbmySyruO7t0Lo7zSfwbZfrQnb.jpg" alt="Zdjęcie 2">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="product" data-category="namioty" data-name="Namiot Turystyczny 2-osobowy" data-price="500"
+           onclick="toggleDetails(this)">
+        <img src="https://cdn.qwenlm.ai/output/c197473d-03c1-406b-8cf7-91b9e3baeeeb/t2i/2295becf-6e07-42bb-9bee-4887c16d5e4a/248c0a9a-62f4-4ebb-abc7-756028322c34.png?key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZXNvdXJjZV91c2VyX2lkIjoiYzE5NzQ3M2QtMDNjMS00MDZiLThjZjctOTFiOWUzYmFlZWViIiwicmVzb3VyY2VfaWQiOiIyNDhjMGE5YS02MmY0LTRlYmItYWJjNy03NTYwMjgzMjJjMzQiLCJyZXNvdXJjZV9jaGF0X2lkIjpudWxsfQ.KXBFsl9SzmyVbRw9ULhTnkmiCQwO2TCTthVS1D-g4PI " alt="Namiot Turystyczny 2-osobowy">
+        <div class="product-body">
+          <h3>Namiot Turystyczny 2-osobowy</h3>
+          <p class="price">500 zł</p>
+          <p class="points-info">+50 pkt za zakup</p>
+          <button class="btn-cart" onclick="addToCart(event, this)">Dodaj do koszyka</button>
+          <button class="btn-fav" onclick="addToWishlist(event, this)">❤️ Dodaj do ulubionych</button>
+          <div class="details-panel">
+            <p><strong>Opis:</strong> Solidny namiot turystyczny dla dwóch osób – doskonały do długich wędrówek.</p>
+            <p><strong>Specyfikacja:</strong></p>
+            <ul class="specifications">
+              <li>Ilość osób: 2</li>
+              <li>Wejście: 1</li>
+              <li>Materiał: Nylon</li>
+              <li>Waga: 2.5 kg</li>
+            </ul>
+            <p><strong>Zdjęcia:</strong></p>
+            <div class="gallery">
+              <img src="https://cdn.qwenlm.ai/output/c197473d-03c1-406b-8cf7-91b9e3baeeeb/t2i/2295becf-6e07-42bb-9bee-4887c16d5e4a/70e19369-b770-4325-a07d-ddba69eb3f1e.png?key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZXNvdXJjZV91c2VyX2lkIjoiYzE5NzQ3M2QtMDNjMS00MDZiLThjZjctOTFiOWUzYmFlZWViIiwicmVzb3VyY2VfaWQiOiI3MGUxOTM2OS1iNzcwLTQzMjUtYTA3ZC1kZGJhNjllYjNmMWUiLCJyZXNvdXJjZV9jaGF0X2lkIjpudWxsfQ.sJ32cZ-8wRSSMlRxtMQrrKciPhoLuwYKgdr_rBML5fw " alt="Zdjęcie 1">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- HAMAKI -->
+      <div class="product" data-category="hamaki" data-name="Hamak Ultralight" data-price="200"
+           onclick="toggleDetails(this)">
+        <img src="https://cdn.qwenlm.ai/output/c197473d-03c1-406b-8cf7-91b9e3baeeeb/t2i/2295becf-6e07-42bb-9bee-4887c16d5e4a/e865ae55-526b-497a-a0c4-41bfacaf8624.png?key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZXNvdXJjZV91c2VyX2lkIjoiYzE5NzQ3M2QtMDNjMS00MDZiLThjZjctOTFiOWUzYmFlZWViIiwicmVzb3VyY2VfaWQiOiJlODY1YWU1NS01MjZiLTQ5N2EtYTBjNC00MWJmYWNhZjg2MjQiLCJyZXNvdXJjZV9jaGF0X2lkIjpudWxsfQ.KNmxZk9ATnGdBC_4_VYY0BQ4LrDFNigQmnANkNnC4N0" alt="Hamak Ultralight">
+        <div class="product-body">
+          <h3>Hamak Ultralight</h3>
+          <p class="price">200 zł</p>
+          <p class="points-info">+20 pkt za zakup</p>
+          <button class="btn-cart" onclick="addToCart(event, this)">Dodaj do koszyka</button>
+          <button class="btn-fav" onclick="addToWishlist(event, this)">❤️ Dodaj do ulubionych</button>
+          <div class="details-panel">
+            <p><strong>Opis:</strong> Wygodny i lekki hamak idealny do relaksu w lesie lub ogrodzie.</p>
+            <p><strong>Specyfikacja:</strong></p>
+            <ul class="specifications">
+              <li>Materiał: Nylon</li>
+              <li>Waga: 300g</li>
+              <li>Nośność: do 200 kg</li>
+              <li>Rozmiar rozwinięty: 3 x 1.5 m</li>
+            </ul>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="product" data-category="hamaki" data-name="Hamak Premium" data-price="300"
+           onclick="toggleDetails(this)">
+        <img src="https://cdn.qwenlm.ai/output/c197473d-03c1-406b-8cf7-91b9e3baeeeb/t2i/2295becf-6e07-42bb-9bee-4887c16d5e4a/44c427d8-bd7c-4b92-8bce-f97315892cd1.png?key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZXNvdXJjZV91c2VyX2lkIjoiYzE5NzQ3M2QtMDNjMS00MDZiLThjZjctOTFiOWUzYmFlZWViIiwicmVzb3VyY2VfaWQiOiI0NGM0MjdkOC1iZDdjLTRiOTItOGJjZS1mOTczMTU4OTJjZDEiLCJyZXNvdXJjZV9jaGF0X2lkIjpudWxsfQ.Pfsq53gi39vg5Mc9RURBVhsSHImKcGetd2njwvxHvnU " alt="Hamak Premium">
+        <div class="product-body">
+          <h3>Hamak Premium</h3>
+          <p class="price">300 zł</p>
+          <p class="points-info">+30 pkt za zakup</p>
+          <button class="btn-cart" onclick="addToCart(event, this)">Dodaj do koszyka</button>
+          <button class="btn-fav" onclick="addToWishlist(event, this)">❤️ Dodaj do ulubionych</button>
+          <div class="details-panel">
+            <p><strong>Opis:</strong> Stylowy hamak z miękkim tkaninowym siedzeniem – idealny do odpoczynku.</p>
+            <p><strong>Specyfikacja:</strong></p>
+            <ul class="specifications">
+              <li>Materiał: Bawełna + nylon</li>
+              <li>Waga: 1.2 kg</li>
+              <li>Nośność: do 250 kg</li>
+              <li>Kolor: naturalny</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="product" data-category="hamaki" data-name="Hamak Rodzinny" data-price="400"
+           onclick="toggleDetails(this)">
+        <img src="https://cdn.qwenlm.ai/output/c197473d-03c1-406b-8cf7-91b9e3baeeeb/t2i/2295becf-6e07-42bb-9bee-4887c16d5e4a/49deff01-bfdb-4bbe-b315-75aebf3d9ca9.png?key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZXNvdXJjZV91c2VyX2lkIjoiYzE5NzQ3M2QtMDNjMS00MDZiLThjZjctOTFiOWUzYmFlZWViIiwicmVzb3VyY2VfaWQiOiI0OWRlZmYwMS1iZmRiLTRiYmUtYjMxNS03NWFlYmYzZDljYTkiLCJyZXNvdXJjZV9jaGF0X2lkIjpudWxsfQ.CaW0ZCSITL9x7qxkRfFZVQZ9lFUQsH3uvlTq4yf5JxY " alt="Hamak Rodzinny">
+        <div class="product-body">
+          <h3>Hamak Rodzinny</h3>
+          <p class="price">400 zł</p>
+          <p class="points-info">+40 pkt za zakup</p>
+          <button class="btn-cart" onclick="addToCart(event, this)">Dodaj do koszyka</button>
+          <button class="btn-fav" onclick="addToWishlist(event, this)">❤️ Dodaj do ulubionych</button>
+          <div class="details-panel">
+            <p><strong>Opis:</strong> Hamak dla całej rodziny – idealny na wycieczki nad jezioro lub wypoczynek w domu letniskowym.</p>
+            <p><strong>Specyfikacja:</strong></p>
+            <ul class="specifications">
+              <li>Ilość osób: 2–3</li>
+              <li>Materiał: Bawełna</li>
+              <li>Nośność: do 300 kg</li>
+              <li>Długość: 4 m</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- ŚPIWORY -->
+      <div class="product" data-category="spiwory" data-name="Śpiwór Synthetik 3-sznurkowy" data-price="300"
+           onclick="toggleDetails(this)">
+        <img src="https://cdn.qwenlm.ai/output/c197473d-03c1-406b-8cf7-91b9e3baeeeb/t2i/2295becf-6e07-42bb-9bee-4887c16d5e4a/17a338ca-eeb9-4e0c-9445-9f80303e170a.png?key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZXNvdXJjZV91c2VyX2lkIjoiYzE5NzQ3M2QtMDNjMS00MDZiLThjZjctOTFiOWUzYmFlZWViIiwicmVzb3VyY2VfaWQiOiIxN2EzMzhjYS1lZWI5LTRlMGMtOTQ0NS05ZjgwMzAzZTE3MGEiLCJyZXNvdXJjZV9jaGF0X2lkIjpudWxsfQ.tZnXltR5SbYu_9DkIIgD2-e02kqaeRQLYTtJUKdi7TI" alt="Śpiwór Synthetik 3-sznurkowy">
+        <div class="product-body">
+          <h3>Śpiwór Synthetik 3-sznurkowy</h3>
+          <p class="price">300 zł</p>
+          <p class="points-info">+30 pkt za zakup</p>
+          <button class="btn-cart" onclick="addToCart(event, this)">Dodaj do koszyka</button>
+          <button class="btn-fav" onclick="addToWishlist(event, this)">❤️ Dodaj do ulubionych</button>
+          <div class="details-panel">
+            <p><strong>Opis:</strong> Śpiwór syntetyczny zapewniający ciepło nawet przy temperaturach do -5°C.</p>
+            <p><strong>Specyfikacja:</strong></p>
+            <ul class="specifications">
+              <li>Materiał wypełnienia: Syntetyczne włókno</li>
+              <li>Materiał zewnętrzny: Nylon</li>
+              <li>Temperatura komfortu: 5°C</li>
+              <li>Waga: 1.5 kg</li>
+            </ul>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="product" data-category="spiwory" data-name="Śpiwór Synthetik 2-sznurkowy" data-price="250"
+           onclick="toggleDetails(this)">
+        <img src="https://cdn.qwenlm.ai/output/c197473d-03c1-406b-8cf7-91b9e3baeeeb/t2i/2295becf-6e07-42bb-9bee-4887c16d5e4a/1335b98f-9b9c-47c0-850b-3a43d282f6b2.png?key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZXNvdXJjZV91c2VyX2lkIjoiYzE5NzQ3M2QtMDNjMS00MDZiLThjZjctOTFiOWUzYmFlZWViIiwicmVzb3VyY2VfaWQiOiIxMzM1Yjk4Zi05YjljLTQ3YzAtODUwYi0zYTQzZDI4MmY2YjIiLCJyZXNvdXJjZV9jaGF0X2lkIjpudWxsfQ.crL2vVGPFVJphOZucT-cDnrEI2VqCFB02mjST7GQ2r4" alt="Śpiwór 2-sznurkowy">
+        <div class="product-body">
+          <h3>Śpiwór Synthetik 2-sznurkowy</h3>
+          <p class="price">250 zł</p>
+          <p class="points-info">+25 pkt za zakup</p>
+          <button class="btn-cart" onclick="addToCart(event, this)">Dodaj do koszyka</button>
+          <button class="btn-fav" onclick="addToWishlist(event, this)">❤️ Dodaj do ulubionych</button>
+          <div class="details-panel">
+            <p><strong>Opis:</strong> Komfortowy śpiwór do sezonowego obozowania i wycieczek wiosennych.</p>
+            <p><strong>Specyfikacja:</strong></p>
+            <ul class="specifications">
+              <li>Materiał wypełnienia: Syntetyczne włókno</li>
+              <li>Temperatura komfortu: 10°C</li>
+              <li>Waga: 1.2 kg</li>
+              <li>Wielkość: 220 x 80 cm</li>
+            </ul>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="product" data-category="spiwory" data-name="Śpiwór Puchowy" data-price="500"
+           onclick="toggleDetails(this)">
+        <img src="https://cdn.qwenlm.ai/output/c197473d-03c1-406b-8cf7-91b9e3baeeeb/t2i/2295becf-6e07-42bb-9bee-4887c16d5e4a/16cc36a7-1ed4-4ac2-acec-3759a2b6cc9c.png?key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZXNvdXJjZV91c2VyX2lkIjoiYzE5NzQ3M2QtMDNjMS00MDZiLThjZjctOTFiOWUzYmFlZWViIiwicmVzb3VyY2VfaWQiOiIxNmNjMzZhNy0xZWQ0LTRhYzItYWNlYy0zNzU5YTJiNmNjOWMiLCJyZXNvdXJjZV9jaGF0X2lkIjpudWxsfQ.eDJ6rf4ZYy-FvgpyovI95aGBOzRpHR1dX32zr9xYlrA" alt="Śpiwór Puchowy">
+        <div class="product-body">
+          <h3>Śpiwór Puchowy</h3>
+          <p class="price">500 zł</p>
+          <p class="points-info">+50 pkt za zakup</p>
+          <button class="btn-cart" onclick="addToCart(event, this)">Dodaj do koszyka</button>
+          <button class="btn-fav" onclick="addToWishlist(event, this)">❤️ Dodaj do ulubionych</button>
+          <div class="details-panel">
+            <p><strong>Opis:</strong> Świetny wybór na zimowe wyprawy – bardzo ciepły śpiwór puchowy.</p>
+            <p><strong>Specyfikacja:</strong></p>
+            <ul class="specifications">
+              <li>Materiał wypełnienia: Puch</li>
+              <li>Temperatura komfortu: -10°C</li>
+              <li>Waga: 1.8 kg</li>
+              <li>Pojemność torby: 20L</li>
+            </ul>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- PLECIAKI -->
+      <div class="product" data-category="plecaki" data-name="Plecak Trekkingowy 50L" data-price="400"
+           onclick="toggleDetails(this)">
+        <img src="https://cdn.qwenlm.ai/output/c197473d-03c1-406b-8cf7-91b9e3baeeeb/t2i/2295becf-6e07-42bb-9bee-4887c16d5e4a/cb3ab0c1-058b-422a-b310-b08a08c4f5c0.png?key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZXNvdXJjZV91c2VyX2lkIjoiYzE5NzQ3M2QtMDNjMS00MDZiLThjZjctOTFiOWUzYmFlZWViIiwicmVzb3VyY2VfaWQiOiJjYjNhYjBjMS0wNThiLTQyMmEtYjMxMC1iMDhhMDhjNGY1YzAiLCJyZXNvdXJjZV9jaGF0X2lkIjpudWxsfQ.r7aEEhmH6FF2jDUffh0iOyYmFK0ecdjvrlWDOpBf1rg" alt="Plecak 50L">
+        <div class="product-body">
+          <h3>Plecak Trekkingowy 50L</h3>
+          <p class="price">400 zł</p>
+          <p class="points-info">+40 pkt za zakup</p>
+          <button class="btn-cart" onclick="addToCart(event, this)">Dodaj do koszyka</button>
+          <button class="btn-fav" onclick="addToWishlist(event, this)">❤️ Dodaj do ulubionych</button>
+          <div class="details-panel">
+            <p><strong>Opis:</strong> Funkcjonalny plecak trekkingowy z wieloma kieszeniami i ergonomicznymi plecami.</p>
+            <p><strong>Specyfikacja:</strong></p>
+            <ul class="specifications">
+              <li>Pojemność: 50L</li>
+              <li>Materiał: Nylon</li>
+              <li>System chłodzenia pleców</li>
+              <li>Komora na laptopa</li>
+              <li>Waga: 1.8 kg</li>
+            </ul>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="product" data-category="plecaki" data-name="Plecak Trekkingowy 30L" data-price="250"
+           onclick="toggleDetails(this)">
+        <img src="https://cdn.qwenlm.ai/output/c197473d-03c1-406b-8cf7-91b9e3baeeeb/t2i/2295becf-6e07-42bb-9bee-4887c16d5e4a/80107feb-1b1b-42ff-ba34-c2c4a6ab4538.png?key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZXNvdXJjZV91c2VyX2lkIjoiYzE5NzQ3M2QtMDNjMS00MDZiLThjZjctOTFiOWUzYmFlZWViIiwicmVzb3VyY2VfaWQiOiI4MDEwN2ZlYi0xYjFiLTQyZmYtYmEzNC1jMmM0YTZhYjQ1MzgiLCJyZXNvdXJjZV9jaGF0X2lkIjpudWxsfQ.uONFtJfxs4haaRIDTNbKa36GWLLyNBOYLFZsMeFsGKw " alt="Plecak 30L">
+        <div class="product-body">
+          <h3>Plecak Trekkingowy 30L</h3>
+          <p class="price">250 zł</p>
+          <p class="points-info">+25 pkt za zakup</p>
+          <button class="btn-cart" onclick="addToCart(event, this)">Dodaj do koszyka</button>
+          <button class="btn-fav" onclick="addToWishlist(event, this)">❤️ Dodaj do ulubionych</button>
+          <div class="details-panel">
+            <p><strong>Opis:</strong> Doskonały do jednodniowych wypraw i aktywności outdoorowych.</p>
+            <p><strong>Specyfikacja:</strong></p>
+            <ul class="specifications">
+              <li>Pojemność: 30L</li>
+              <li>Materiał: Poliester</li>
+              <li>Inkluzja: System hydratacyjny</li>
+              <li>Przystosowany do latania dronem</li>
+              <li>Waga: 1.1 kg</li>
+            </ul>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="product" data-category="plecaki" data-name="Plecak Narzędziowy 20L" data-price="180"
+           onclick="toggleDetails(this)">
+        <img src="https://cdn.qwenlm.ai/output/c197473d-03c1-406b-8cf7-91b9e3baeeeb/t2i/2295becf-6e07-42bb-9bee-4887c16d5e4a/a126f52a-99f5-4300-9551-d917674640f7.png?key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZXNvdXJjZV91c2VyX2lkIjoiYzE5NzQ3M2QtMDNjMS00MDZiLThjZjctOTFiOWUzYmFlZWViIiwicmVzb3VyY2VfaWQiOiJhMTI2ZjUyYS05OWY1LTQzMDAtOTU1MS1kOTE3Njc0NjQwZjciLCJyZXNvdXJjZV9jaGF0X2lkIjpudWxsfQ.6DxO9D2eyZWP9hXImzJ9kYBU6eGxDzcunbLnK_S8d5M" alt="Plecak Narzędziowy 20L">
+        <div class="product-body">
+          <h3>Plecak Narzędziowy 20L</h3>
+          <p class="price">180 zł</p>
+          <p class="points-info">+18 pkt za zakup</p>
+          <button class="btn-cart" onclick="addToCart(event, this)">Dodaj do koszyka</button>
+          <button class="btn-fav" onclick="addToWishlist(event, this)">❤️ Dodaj do ulubionych</button>
+          <div class="details-panel">
+            <p><strong>Opis:</strong> Mały plecak idealny do krótkich wypraw, wspinaczki czy pracy w terenie.</p>
+            <p><strong>Specyfikacja:</strong></p>
+            <ul class="specifications">
+              <li>Pojemność: 20L</li>
+              <li>Materiał: Poliester</li>
+              <li>Szczelne zamknięcia</li>
+              <li>Wielofunkcyjne kieszenie</li>
+              <li>Waga: 0.8 kg</li>
+            </ul>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- KIJKI -->
+      <div class="product" data-category="kijki" data-name="Kijek Aluminiowy" data-price="120"
+           onclick="toggleDetails(this)">
+        <img src="https://cdn.qwenlm.ai/output/c197473d-03c1-406b-8cf7-91b9e3baeeeb/t2i/2295becf-6e07-42bb-9bee-4887c16d5e4a/7c7170d6-0d3b-46e0-9bff-111daa3dc94d.png?key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZXNvdXJjZV91c2VyX2lkIjoiYzE5NzQ3M2QtMDNjMS00MDZiLThjZjctOTFiOWUzYmFlZWViIiwicmVzb3VyY2VfaWQiOiI3YzcxNzBkNi0wZDNiLTQ2ZTAtOWJmZi0xMTFkYWEzZGM5NGQiLCJyZXNvdXJjZV9jaGF0X2lkIjpudWxsfQ.qaO09reDS7b1-iQj8FGuYIftaMgajHInCg9XDbERaH8" alt="Kijek Aluminiowy">
+        <div class="product-body">
+          <h3>Kijek Aluminiowy</h3>
+          <p class="price">120 zł</p>
+          <p class="points-info">+12 pkt za zakup</p>
+          <button class="btn-cart" onclick="addToCart(event, this)">Dodaj do koszyka</button>
+          <button class="btn-fav" onclick="addToWishlist(event, this)">❤️ Dodaj do ulubionych</button>
+          <div class="details-panel">
+            <p><strong>Opis:</strong> Lekki aluminiowy kijek turystyczny idealny na trudnych terenach.</p>
+            <p><strong>Specyfikacja:</strong></p>
+            <ul class="specifications">
+              <li>Materiał: Aluminium</li>
+              <li>Regulowana długość: 110–135 cm</li>
+              <li>Waga: 250g/szt.</li>
+              <li>Gumowe końcówki</li>
+              <li>Opaska na rękę</li>
+            </ul>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="product" data-category="kijki" data-name="Kijek Karbonowy" data-price="200"
+           onclick="toggleDetails(this)">
+        <img src="https://cdn.qwenlm.ai/output/c197473d-03c1-406b-8cf7-91b9e3baeeeb/t2i/2295becf-6e07-42bb-9bee-4887c16d5e4a/f6bc90b3-5356-4f0c-b9dc-01876e81c36b.png?key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZXNvdXJjZV91c2VyX2lkIjoiYzE5NzQ3M2QtMDNjMS00MDZiLThjZjctOTFiOWUzYmFlZWViIiwicmVzb3VyY2VfaWQiOiJmNmJjOTBiMy01MzU2LTRmMGMtYjlkYy0wMTg3NmU4MWMzNmIiLCJyZXNvdXJjZV9jaGF0X2lkIjpudWxsfQ.jhmZgIWlOy31QIlkfAmXoyvnLH311GIf-eUzf6gznzM" alt="Kijek Karbonowy">
+        <div class="product-body">
+          <h3>Kijek Karbonowy</h3>
+          <p class="price">200 zł</p>
+          <p class="points-info">+20 pkt za zakup</p>
+          <button class="btn-cart" onclick="addToCart(event, this)">Dodaj do koszyka</button>
+          <button class="btn-fav" onclick="addToWishlist(event, this)">❤️ Dodaj do ulubionych</button>
+          <div class="details-panel">
+            <p><strong>Opis:</strong> Ekstremalnie lekki kijek karbonowy do zaawansowanego trekkingu.</p>
+            <p><strong>Specyfikacja:</strong></p>
+            <ul class="specifications">
+              <li>Materiał: Włókno węglowe</li>
+              <li>Długość: 100–130 cm</li>
+              <li>Waga: 180g/szt.</li>
+              <li>Minimalna wibracja</li>
+              <li>Opaska sportowa</li>
+            </ul>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="product" data-category="kijki" data-name="Kijek Teleskopowy" data-price="150"
+           onclick="toggleDetails(this)">
+        <img src="https://cdn.qwenlm.ai/output/c197473d-03c1-406b-8cf7-91b9e3baeeeb/t2i/2295becf-6e07-42bb-9bee-4887c16d5e4a/09d30548-c52a-45e2-a9ab-1565ef9d9687.png?key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZXNvdXJjZV91c2VyX2lkIjoiYzE5NzQ3M2QtMDNjMS00MDZiLThjZjctOTFiOWUzYmFlZWViIiwicmVzb3VyY2VfaWQiOiIwOWQzMDU0OC1jNTJhLTQ1ZTItYTlhYi0xNTY1ZWY5ZDk2ODciLCJyZXNvdXJjZV9jaGF0X2lkIjpudWxsfQ.Cxo5PRMMlvT6jWzlu3bHiUT8KLn0u4nuUk5FSSlK0ts " alt="Kijek Teleskopowy">
+        <div class="product-body">
+          <h3>Kijek Teleskopowy</h3>
+          <p class="price">150 zł</p>
+          <p class="points-info">+15 pkt za zakup</p>
+          <button class="btn-cart" onclick="addToCart(event, this)">Dodaj do koszyka</button>
+          <button class="btn-fav" onclick="addToWishlist(event, this)">❤️ Dodaj do ulubionych</button>
+          <div class="details-panel">
+            <p><strong>Opis:</strong> Regulowany kijek teleskopowy do różnych warunków terenowych.</p>
+            <p><strong>Specyfikacja:</strong></p>
+            <ul class="specifications">
+              <li>Materiał: Aluminium</li>
+              <li>Długość: 65–135 cm</li>
+              <li>Waga: 220g/szt.</li>
+              <li>Trwałe gumowe końcówki</li>
+            </ul>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- SURVIVAL -->
+      <div class="product" data-category="survival" data-name="Zestaw Survivalowy Deluxe" data-price="300"
+           onclick="toggleDetails(this)">
+        <img src="https://cdn.qwenlm.ai/output/c197473d-03c1-406b-8cf7-91b9e3baeeeb/t2i/2295becf-6e07-42bb-9bee-4887c16d5e4a/c2e94d20-231d-4539-935c-35e60e1650f4.png?key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZXNvdXJjZV91c2VyX2lkIjoiYzE5NzQ3M2QtMDNjMS00MDZiLThjZjctOTFiOWUzYmFlZWViIiwicmVzb3VyY2VfaWQiOiJjMmU5NGQyMC0yMzFkLTQ1MzktOTM1Yy0zNWU2MGUxNjUwZjQiLCJyZXNvdXJjZV9jaGF0X2lkIjpudWxsfQ.sFVSkIdSW7Mt_83kAgQ5sClTHMss6RGT2eQ1y6r45ig " alt="Zestaw Survivalowy Deluxe">
+        <div class="product-body">
+          <h3>Zestaw Survivalowy Deluxe</h3>
+          <p class="price">300 zł</p>
+          <p class="points-info">+30 pkt za zakup</p>
+          <button class="btn-cart" onclick="addToCart(event, this)">Dodaj do koszyka</button>
+          <button class="btn-fav" onclick="addToWishlist(event, this)">❤️ Dodaj do ulubionych</button>
+          <div class="details-panel">
+            <p><strong>Opis:</strong> Kompletny zestaw narzędzi do przetrwania w dziczy – idealny dla amatorów przygód.</p>
+            <p><strong>Specyfikacja:</strong></p>
+            <ul class="specifications">
+              <li>Noże</li>
+              <li>Apteczka</li>
+              <li>Lina</li>
+              <li>Kompas</li>
+              <li>Zapalniczka</li>
+            </ul>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="product" data-category="survival" data-name="Zestaw Survivalowy Standard" data-price="200"
+           onclick="toggleDetails(this)">
+        <img src="https://cdn.qwenlm.ai/output/c197473d-03c1-406b-8cf7-91b9e3baeeeb/t2i/2295becf-6e07-42bb-9bee-4887c16d5e4a/fc7d4a46-d170-4eaa-864a-1284960dba75.png?key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZXNvdXJjZV91c2VyX2lkIjoiYzE5NzQ3M2QtMDNjMS00MDZiLThjZjctOTFiOWUzYmFlZWViIiwicmVzb3VyY2VfaWQiOiJmYzdkNGE0Ni1kMTcwLTRlYWEtODY0YS0xMjg0OTYwZGJhNzUiLCJyZXNvdXJjZV9jaGF0X2lkIjpudWxsfQ.qvVL7Njp9LrLregE__RzfEoXd2Taf7AkqoQrczRfuE8 " alt="Zestaw Survivalowy Standard">
+        <div class="product-body">
+          <h3>Zestaw Survivalowy Standard</h3>
+          <p class="price">200 zł</p>
+          <p class="points-info">+20 pkt za zakup</p>
+          <button class="btn-cart" onclick="addToCart(event, this)">Dodaj do koszyka</button>
+          <button class="btn-fav" onclick="addToWishlist(event, this)">❤️ Dodaj do ulubionych</button>
+          <div class="details-panel">
+            <p><strong>Opis:</strong> Podstawowy zestaw do survivalu – zawiera najważniejsze elementy.</p>
+            <p><strong>Specyfikacja:</strong></p>
+            <ul class="specifications">
+              <li>nożyk</li>
+              <li>Latarka</li>
+              <li>Lina</li>
+              <li>Bateria</li>
+              <li>Cukierek proteinowy</li>
+            </ul>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="product" data-category="survival" data-name="Zestaw Survivalowy Mini" data-price="150"
+           onclick="toggleDetails(this)">
+        <img src="https://cdn.qwenlm.ai/output/c197473d-03c1-406b-8cf7-91b9e3baeeeb/t2i/2295becf-6e07-42bb-9bee-4887c16d5e4a/0fd48aca-4513-4c56-9d49-1f5ddfa764bf.png?key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZXNvdXJjZV91c2VyX2lkIjoiYzE5NzQ3M2QtMDNjMS00MDZiLThjZjctOTFiOWUzYmFlZWViIiwicmVzb3VyY2VfaWQiOiIwZmQ0OGFjYS00NTEzLTRjNTYtOWQ0OS0xZjVkZGZhNzY0YmYiLCJyZXNvdXJjZV9jaGF0X2lkIjpudWxsfQ.ra51228arDhpoYzdZ8JQzwj4kuTnfgM7_OXXa0BgyDs " alt="Zestaw Survivalowy Mini">
+        <div class="product-body">
+          <h3>Zestaw Survivalowy Mini</h3>
+          <p class="price">150 zł</p>
+          <p class="points-info">+15 pkt za zakup</p>
+          <button class="btn-cart" onclick="addToCart(event, this)">Dodaj do koszyka</button>
+          <button class="btn-fav" onclick="addToWishlist(event, this)">❤️ Dodaj do ulubionych</button>
+          <div class="details-panel">
+            <p><strong>Opis:</strong> Mały, przenośny zestaw idealny dla nowicjuszy.</p>
+            <p><strong>Specyfikacja:</strong></p>
+            <ul class="specifications">
+              <li>Kompas</li>
+              <li>Latarka</li>
+              <li>Zapalniczka</li>
+              <li>Nożyk</li>
+            </ul>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- AKCESORIA -->
+      <div class="product" data-category="akcesoria" data-name="Kompas Biwakowy" data-price="80"
+           onclick="toggleDetails(this)">
+        <img src="https://cdn.qwenlm.ai/output/c197473d-03c1-406b-8cf7-91b9e3baeeeb/t2i/2295becf-6e07-42bb-9bee-4887c16d5e4a/1bbe79a6-39c8-4f17-98e6-cd2c49163095.png?key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZXNvdXJjZV91c2VyX2lkIjoiYzE5NzQ3M2QtMDNjMS00MDZiLThjZjctOTFiOWUzYmFlZWViIiwicmVzb3VyY2VfaWQiOiIxYmJlNzlhNi0zOWM4LTRmMTctOThlNi1jZDJjNDkxNjMwOTUiLCJyZXNvdXJjZV9jaGF0X2lkIjpudWxsfQ.WJV3jQS2B22Yl5MGG6smFqRm1BSJYObtb8szGvDA1Cw " alt="Kompas Biwakowy">
+        <div class="product-body">
+          <h3>Kompas Biwakowy</h3>
+          <p class="price">80 zł</p>
+          <p class="points-info">+8 pkt za zakup</p>
+          <button class="btn-cart" onclick="addToCart(event, this)">Dodaj do koszyka</button>
+          <button class="btn-fav" onclick="addToWishlist(event, this)">❤️ Dodaj do ulubionych</button>
+          <div class="details-panel">
+            <p><strong>Opis:</strong> Precyzyjny kompas militarny z podświetleniem – niezastąpiony w terenie.</p>
+            <p><strong>Specyfikacja:</strong></p>
+            <ul class="specifications">
+              <li>Magnetyczny</li>
+              <li>Podświetlenie nocne</li>
+              <li>Skala stopniowa</li>
+              <li>Wodoodporność</li>
+              <li>Waga: 80g</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="product" data-category="akcesoria" data-name="Zestaw Ogniskowy" data-price="150"
+           onclick="toggleDetails(this)">
+        <img src="https://cdn.qwenlm.ai/output/c197473d-03c1-406b-8cf7-91b9e3baeeeb/t2i/2295becf-6e07-42bb-9bee-4887c16d5e4a/4e9b2ce2-7250-4b29-964c-c9ba94627b8c.png?key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZXNvdXJjZV91c2VyX2lkIjoiYzE5NzQ3M2QtMDNjMS00MDZiLThjZjctOTFiOWUzYmFlZWViIiwicmVzb3VyY2VfaWQiOiI0ZTliMmNlMi03MjUwLTRiMjktOTY0Yy1jOWJhOTQ2MjdiOGMiLCJyZXNvdXJjZV9jaGF0X2lkIjpudWxsfQ.1vcnfTZcrUAthu1YHmG5hdIMk7Xvp8byuEdz69kaH6w" alt="Zestaw Ogniskowy">
+        <div class="product-body">
+          <h3>Zestaw Ogniskowy</h3>
+          <p class="price">150 zł</p>
+          <p class="points-info">+15 pkt za zakup</p>
+          <button class="btn-cart" onclick="addToCart(event, this)">Dodaj do koszyka</button>
+          <button class="btn-fav" onclick="addToWishlist(event, this)">❤️ Dodaj do ulubionych</button>
+          <div class="details-panel">
+            <p><strong>Opis:</strong> Gotowy zestaw do rozpalenia ogniska – idealny dla każdego biwakowicza.</p>
+            <p><strong>Specyfikacja:</strong></p>
+            <ul class="specifications">
+              <li>Kostka żaroodporna</li>
+              <li>Pudełko zapalacza</li>
+              <li>Paliwo do ognia</li>
+              <li>Pochwa ogniskowa</li>
+              <li>Materiał: stal nierdzewna</li>
+            </ul>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="product" data-category="akcesoria" data-name="Rękawiczki Ogniotrwałe" data-price="90"
+           onclick="toggleDetails(this)">
+        <img src="https://cdn.qwenlm.ai/output/c197473d-03c1-406b-8cf7-91b9e3baeeeb/t2i/2295becf-6e07-42bb-9bee-4887c16d5e4a/984932a9-3755-4161-b6b1-d6716331dde2.png?key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZXNvdXJjZV91c2VyX2lkIjoiYzE5NzQ3M2QtMDNjMS00MDZiLThjZjctOTFiOWUzYmFlZWViIiwicmVzb3VyY2VfaWQiOiI5ODQ5MzJhOS0zNzU1LTQxNjEtYjZiMS1kNjcxNjMzMWRkZTIiLCJyZXNvdXJjZV9jaGF0X2lkIjpudWxsfQ.fupUuv0KAFjPxBOQI9MJLNJFCM5hkmeBSx6QrCr8eSs" alt="Rękawiczki Ogniotrwałe">
+        <div class="product-body">
+          <h3>Rękawiczki Ogniotrwałe</h3>
+          <p class="price">90 zł</p>
+          <p class="points-info">+9 pkt za zakup</p>
+          <button class="btn-cart" onclick="addToCart(event, this)">Dodaj do koszyka</button>
+          <button class="btn-fav" onclick="addToWishlist(event, this)">❤️ Dodaj do ulubionych</button>
+          <div class="details-panel">
+            <p><strong>Opis:</strong> Rękawiczki ogniotrwałe – bezpieczne palenie ognia nawet w trudnych warunkach.</p>
+            <p><strong>Specyfikacja:</strong></p>
+            <ul class="specifications">
+              <li>Materiał: aramid</li>
+              <li>Temperatura: do 350°C</li>
+              <li>Wodoodporność</li>
+              <li>Rozmiar: uniwersalny</li>
+            </ul>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- O nas -->
+  <section id="about" class="section">
+    <h2>O nas</h2>
+    <p>Jesteśmy pasjonatami outdooru i przyrody. Naszym celem jest dostarczanie najwyższej jakości sprzętu turystycznego i biwakowego dla miłośników aktywnego stylu życia.</p>
+  </section>
+  <!-- Program lojalnościowy -->
+  <section id="loyalty" class="section">
+    <h2>Program Lojalnościowy – HowlGear Club</h2>
+    <p>Każdy zakup przynosi punkty, które możesz wymieniać na rabaty, produkty lub ekskluzywne oferty!</p>
+    <div class="level bronze">
+      <h3>Brązowy Poziom</h3>
+      <ul>
+        <li>Do 100 punktów</li>
+        <li>5% rabatu</li>
+        <li>Dostęp do newslettera</li>
+      </ul>
+    </div>
+    <div class="level silver">
+      <h3>Srebrny Poziom</h3>
+      <ul>
+        <li>101–300 punktów</li>
+        <li>10% rabatu</li>
+        <li>Wyprzedania przed premierą</li>
+      </ul>
+    </div>
+    <div class="level gold">
+      <h3>Złoty Poziom</h3>
+      <ul>
+        <li>301–700 punktów</li>
+        <li>15% rabatu</li>
+        <li>Premium wsparcie</li>
+      </ul>
+    </div>
+    <div class="level vip">
+      <h3>VIP</h3>
+      <ul>
+        <li>Pow. 700 punktów</li>
+        <li>20% rabatu</li>
+        <li>Bezpłatna wysyłka</li>
+      </ul>
+    </div>
+    <h3>Twój aktualny poziom: <span id="userLevel">Brązowy</span></h3>
+    <p>Aktualnie masz: <span id="points">0</span> punktów.</p>
+  </section>
+  <!-- Kontakt -->
+  <section id="contact" class="section">
+    <h2>Kontakt</h2>
+    <form onsubmit="return validateForm(event)">
+      <label for="name">Imię i nazwisko:</label>
+      <input type="text" id="name" name="name">
+      <div class="error" id="nameError"></div>
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email">
+      <div class="error" id="emailError"></div>
+      <label for="message">Wiadomość:</label>
+      <textarea id="message" name="message"></textarea>
+      <div class="error" id="messageError"></div>
+      <button type="submit">Wyślij</button>
+    </form>
+  </section>
+</main>
+<!-- Ikony Social Media -->
+<div class="social-icons">
+  <a href="https://www.instagram.com/howl_gear/profilecard/?igsh=em44OHN5dWFwYzA1 " target="_blank">📸 INSTAGRAM</a>
+  <a href="https://tiktok.com " target="_blank">🎵 TIKTOK</a>
+</div>
+<footer>
+  &copy; 2025 HowlGear - Wszelkie prawa zastrzeżone.
+</footer>
+<!-- Podsumowanie koszyka / ulubionych -->
+<div id="summaryOverlay" style="display:none; position:fixed; top:60px; right:20px; width:300px; background:#fff; padding:15px; border:1px solid #ccc; z-index:1000; border-radius:10px;">
+  <h3 id="summaryTitle"></h3>
+  <ul id="summaryList"></ul>
+  <div id="summaryEmpty" class="summary-empty">Brak produktów</div>
+  <p id="summaryTotal" style="font-weight:bold;"></p>
+  <button onclick="closeSummary()" style="background:#7aa178; border:none; padding:8px 15px; border-radius:5px; float:right; color:white;">Zamknij</button>
+</div>
+<!-- Overlay do przybliżenia zdjęcia -->
+<div class="zoom-overlay" id="zoomOverlay">
+  <img src="" alt="Powiększone zdjęcie" id="zoomedImage">
+</div>
+
+<script>
+  let cart = [];
+  let wishlist = [];
+  let points = 0;
+
+  // Pokazuj odpowiednią sekcję
+  function showSection(id) {
+    document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
+    if (id === 'home') {
+      document.getElementById('home').classList.add('active');
+      document.getElementById('categoryGrid').style.display = 'grid';
+    } else {
+      document.getElementById('categoryGrid').style.display = 'none';
+      document.getElementById(id).classList.add('active');
+    }
+    // Aktualizuj aktywną zakładkę nawigacyjną
+    document.querySelectorAll('.main-nav a').forEach(a => a.classList.remove('active'));
+    const activeLink = [...document.querySelectorAll('.main-nav a')]
+      .find(a => a.getAttribute('data-section') === id);
+    if (activeLink) activeLink.classList.add('active');
+  }
+
+  // Pokazuj szczegóły produktu
+  function toggleDetails(product) {
+    const details = product.querySelector('.details-panel');
+    const allPanels = document.querySelectorAll('.details-panel');
+
+    // Ukryj wszystkie inne szczegóły
+    allPanels.forEach(panel => panel.style.display = 'none');
+
+    // Jeśli już jest otwarty, to go zamknij
+    if (details && details.style.display === 'block') {
+      details.style.display = 'none';
+    } else if (details) {
+      details.style.display = 'block';
+    }
+  }
+
+  // Dodaj do koszyka
+  function addToCart(e, btn) {
+    e.stopPropagation();
+    const product = btn.closest('.product');
+    const name = product.dataset.name;
+    const price = parseFloat(product.dataset.price);
+    const existing = cart.find(item => item.name === name);
+    if (existing) {
+      existing.qty++;
+    } else {
+      cart.push({ name, price, qty: 1 });
+    }
+    points += Math.floor(price / 10);
+    updateLoyaltyLevel();
+    updateCartUI();
+    toggleSummary('cart');
+  }
+
+  // Dodaj do ulubionych
+  function addToWishlist(e, btn) {
+    e.stopPropagation();
+    const product = btn.closest('.product');
+    const name = product.dataset.name;
+    if (!wishlist.includes(name)) {
+      wishlist.push(name);
+      btn.classList.add('liked');
+    } else {
+      wishlist.splice(wishlist.indexOf(name), 1);
+      btn.classList.remove('liked');
+    }
+    document.getElementById('wishlistCount').textContent = wishlist.length;
+  }
+
+  // Aktualizacja UI koszyka
+  function updateCartUI() {
+    document.getElementById('cartCount').textContent = cart.reduce((sum, item) => sum + item.qty, 0);
+  }
+
+  // Program lojalnościowy
+  function updateLoyaltyLevel() {
+    document.getElementById('points').textContent = points;
+    let level = "Brązowy";
+    if (points >= 700) level = "VIP";
+    else if (points >= 300) level = "Złoty";
+    else if (points >= 100) level = "Srebrny";
+    document.getElementById('userLevel').textContent = level;
+  }
+
+  // Filtrowanie produktów
+  function filterProducts(category) {
+    const products = document.querySelectorAll('.product');
+    products.forEach(p => {
+      p.style.display = category === 'all' || p.getAttribute('data-category') === category ? 'block' : 'none';
+    });
+  }
+
+  // Sortowanie produktów
+  function sortProducts() {
+    const sortOption = document.getElementById('sort').value;
+    const products = Array.from(document.querySelectorAll('.product'));
+    switch (sortOption) {
+      case 'priceAsc':
+        products.sort((a, b) => a.dataset.price - b.dataset.price);
+        break;
+      case 'priceDesc':
+        products.sort((a, b) => b.dataset.price - a.dataset.price);
+        break;
+      case 'nameAsc':
+        products.sort((a, b) => a.dataset.name.localeCompare(b.dataset.name));
+        break;
+      case 'nameDesc':
+        products.sort((a, b) => b.dataset.name.localeCompare(a.dataset.name));
+        break;
+      default:
+        break;
+    }
+    const container = document.getElementById('productsContainer');
+    container.innerHTML = '';
+    products.forEach(p => container.appendChild(p));
+  }
+
+  // Podsumowanie koszyka / ulubionych
+  function toggleSummary(type) {
+    const overlay = document.getElementById('summaryOverlay');
+    const title = document.getElementById('summaryTitle');
+    const list = document.getElementById('summaryList');
+    const total = document.getElementById('summaryTotal');
+    const empty = document.getElementById('summaryEmpty');
+    overlay.style.display = 'block';
+    if (type === 'cart') {
+      title.textContent = 'Twój koszyk:';
+      list.innerHTML = '';
+      total.textContent = `Razem: ${cart.reduce((sum, item) => sum + item.price * item.qty, 0)} zł`;
+      empty.style.display = cart.length === 0 ? 'block' : 'none';
+      cart.forEach((item, index) => {
+        const li = document.createElement('li');
+        li.innerHTML = `
+          <strong>${item.name}</strong> x${item.qty} (${item.price} zł)
+          <div class="quantity-controls">
+            <button onclick="changeQty(${index}, -1)">-</button>
+            <span>${item.qty}</span>
+            <button onclick="changeQty(${index}, 1)">+</button>
+          </div>
+        `;
+        list.appendChild(li);
+      });
+    } else if (type === 'wishlist') {
+      title.textContent = 'Ulubione:';
+      list.innerHTML = '';
+      total.textContent = `Ilość: ${wishlist.length}`;
+      empty.style.display = wishlist.length === 0 ? 'block' : 'none';
+      wishlist.forEach(name => {
+        const li = document.createElement('li');
+        li.textContent = name;
+        list.appendChild(li);
+      });
+    }
+  }
+
+  function changeQty(index, delta) {
+    cart[index].qty += delta;
+    if (cart[index].qty <= 0) {
+      cart.splice(index, 1);
+    }
+    updateCartUI();
+    toggleSummary('cart');
+  }
+
+  function closeSummary() {
+    document.getElementById('summaryOverlay').style.display = 'none';
+  }
+
+  // Walidacja formularza kontaktowego
+  function validateForm(e) {
+    e.preventDefault();
+    const name = document.getElementById('name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const message = document.getElementById('message').value.trim();
+    document.getElementById('nameError').textContent = '';
+    document.getElementById('emailError').textContent = '';
+    document.getElementById('messageError').textContent = '';
+    let valid = true;
+    if (name.length < 3) {
+      document.getElementById('nameError').textContent = 'Podaj poprawne imię i nazwisko.';
+      valid = false;
+    }
+    if (!/\S+@\S+\.\S+/.test(email)) {
+      document.getElementById('emailError').textContent = 'Podaj poprawny adres email.';
+      valid = false;
+    }
+    if (message.length < 10) {
+      document.getElementById('messageError').textContent = 'Wiadomość musi mieć co najmniej 10 znaków.';
+      valid = false;
+    }
+    if (valid) alert("Wiadomość została wysłana!");
+    return false;
+  }
+
+  // Wyszukiwanie produktów
+  function searchProducts(query) {
+    const suggestions = document.getElementById('suggestions');
+    const products = document.querySelectorAll('.product');
+    const results = [];
+    suggestions.innerHTML = '';
+    if (query.trim()) {
+      products.forEach(p => {
+        if (p.dataset.name.toLowerCase().includes(query.toLowerCase())) {
+          results.push(p);
+        }
+      });
+      results.slice(0, 5).forEach(p => {
+        const div = document.createElement('div');
+        div.className = 'suggestion-item';
+        div.textContent = p.dataset.name;
+        div.onclick = () => {
+          document.getElementById('searchInput').value = p.dataset.name;
+          document.getElementById('suggestions').style.display = 'none';
+          document.getElementById('productsContainer').innerHTML = '';
+          document.getElementById('productsContainer').appendChild(p);
+        };
+        suggestions.appendChild(div);
+      });
+      suggestions.style.display = results.length > 0 ? 'block' : 'none';
+    } else {
+      suggestions.style.display = 'none';
+    }
+  }
+
+  // Powiększ zdjęcie po kliknięciu
+  document.addEventListener('click', function(e) {
+    if (e.target.tagName === 'IMG' && e.target.closest('.product')) {
+      const overlay = document.getElementById('zoomOverlay');
+      const zoomImg = document.getElementById('zoomedImage');
+      zoomImg.src = e.target.src;
+      overlay.style.display = 'flex';
+    }
+  });
+
+  // Zamknij zdjęcie po kliknięciu na overlay
+  document.getElementById('zoomOverlay').addEventListener('click', function() {
+    this.style.display = 'none';
+  });
+
+  window.onload = () => showSection('home');
+</script>
+</body>
+</html>
