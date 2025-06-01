@@ -5,6 +5,34 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>HowlGear - Sklep Outdoorowy</title>
   <style>
+  .text-slider {
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  background-color: #ebe4d7;
+  padding: 10px 0;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  margin: 20px 0;
+}
+
+.slider-content {
+  display: inline-block;
+  padding-left: 100%;
+  animation: scrollText 20s linear infinite;
+  font-size: 18px;
+  color: #388e3c;
+  font-weight: bold;
+}
+
+@keyframes scrollText {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+}
     * {
       margin: 0;
       padding: 0;
@@ -106,10 +134,12 @@
       display: block;
     }
     /* Slider */
-    .slider {
-      width: 100%;
-      overflow: hidden;
-      margin: 20px 0;
+.slider {
+  width: 100%;
+  max-height: 150px; /* Nowa wysokość */
+  overflow: hidden;
+  margin: 20px 0;
+}
     }
     .slide-track {
       display: flex;
@@ -125,11 +155,17 @@
       padding: 10px;
       box-sizing: border-box;
     }
-    .slide img {
-      width: 100%;
-      height: auto;
-      border-radius: 8px;
-    }
+.slide img {
+  width: 100%;
+  height: 120px; /* Stała wysokość */
+  object-fit: cover; /* Ucięte zdjęcia, ale z zachowaniem proporcji */
+  border-radius: 8px;
+}
+.slide {
+  min-width: 200px; /* Zmniejszono z 300px */
+  padding: 5px;
+  box-sizing: border-box;
+}
     /* Kategorie z ikonkami */
     .category-grid {
       display: grid;
@@ -530,15 +566,11 @@
   <input type="text" id="searchInput" placeholder="Szukaj produktu..." oninput="searchProducts(this.value)">
   <div class="suggestions" id="suggestions"></div>
 </div>
-<!-- Slider promocyjny -->
-<div class="slider">
-  <div class="slide-track" id="slideTrack">
-    <div class="slide"><img src="https://via.placeholder.com/300x150?text=Nowo ść+tygodnia" alt=""></div>
-    <div class="slide"><img src="https://via.placeholder.com/300x150?text=Rabat+do+20% " alt=""></div>
-    <div class="slide"><img src="https://via.placeholder.com/300x150?text=Zestaw+na+wiosn ę" alt=""></div>
-    <div class="slide"><img src="https://via.placeholder.com/300x150?text=Promocja+VIP " alt=""></div>
-    <div class="slide"><img src="https://via.placeholder.com/300x150?text=Zestaw+biwakowy " alt=""></div>
-  </div>
+<!-- Tekstowy slider -->
+<div class="text-slider">
+  <div class="slider-content">
+    📦 Darmowa dostawa od 499 zł &nbsp;&nbsp;•&nbsp;&nbsp; 🎯 Poziom VIP już od 700 pkt &nbsp;&nbsp;•&nbsp;&nbsp; 🔥 Zestaw ogniskowy -30% teraz!&nbsp;&nbsp;•&nbsp;&nbsp; 🏕️ Namiot Tunelowy 2-osobowy - już teraz -20%!!!
+	</div>
 </div>
 <!-- Kategorie z ikonkami -->
 <div class="category-grid" id="categoryGrid" style="display: flex;">
@@ -625,11 +657,11 @@
         <img src="https://as1.ftcdn.net/v2/jpg/00/75/03/54/1000_F_75035440_sfsNmH786GJz2jLa5dxRKsl8CnAAD52w.jpg " alt="Namiot Tunelowy 2-osobowy">
         <div class="product-body">
           <h3>Namiot Tunelowy 2-osobowy</h3>
-          <p class="price">400 zł</p>
-          <p class="points-info">+40 pkt za zakup</p>
-          <button class="btn-cart" onclick="addToCart(event, this)">Dodaj do koszyka</button>
-          <button class="btn-fav" onclick="addToWishlist(event, this)">❤️ Dodaj do ulubionych</button>
-          <div class="details-panel">
+ <p class="price"><del>500 zł</del> <strong style="color: #e53935;">400 zł (-20%)</strong></p> 
+    <p class="points-info">+40 pkt za zakup</p>
+    <button class="btn-cart" onclick="addToCart(event, this)">Dodaj do koszyka</button>
+    <button class="btn-fav" onclick="addToWishlist(event, this)">❤️ Dodaj do ulubionych</button>
+    <div class="details-panel">
             <p><strong>Opis:</strong> Idealny namiot tunelowy na krótkie rajdy rowerowe lub piesze. Komfortowa przestrzeń.</p>
             <p><strong>Specyfikacja:</strong></p>
             <ul class="specifications">
@@ -1057,11 +1089,11 @@
         <img src="https://cdn.qwenlm.ai/output/c197473d-03c1-406b-8cf7-91b9e3baeeeb/t2i/2295becf-6e07-42bb-9bee-4887c16d5e4a/4e9b2ce2-7250-4b29-964c-c9ba94627b8c.png?key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZXNvdXJjZV91c2VyX2lkIjoiYzE5NzQ3M2QtMDNjMS00MDZiLThjZjctOTFiOWUzYmFlZWViIiwicmVzb3VyY2VfaWQiOiI0ZTliMmNlMi03MjUwLTRiMjktOTY0Yy1jOWJhOTQ2MjdiOGMiLCJyZXNvdXJjZV9jaGF0X2lkIjpudWxsfQ.1vcnfTZcrUAthu1YHmG5hdIMk7Xvp8byuEdz69kaH6w" alt="Zestaw Ogniskowy">
         <div class="product-body">
           <h3>Zestaw Ogniskowy</h3>
-          <p class="price">150 zł</p>
-          <p class="points-info">+15 pkt za zakup</p>
-          <button class="btn-cart" onclick="addToCart(event, this)">Dodaj do koszyka</button>
-          <button class="btn-fav" onclick="addToWishlist(event, this)">❤️ Dodaj do ulubionych</button>
-          <div class="details-panel">
+    <p class="price"><del>100 zł</del> <strong style="color: #e53935;">70 zł (-30%)</strong></p> 
+    <p class="points-info">+7 pkt za zakup</p>
+    <button class="btn-cart" onclick="addToCart(event, this)">Dodaj do koszyka</button>
+    <button class="btn-fav" onclick="addToWishlist(event, this)">❤️ Dodaj do ulubionych</button>
+    <div class="details-panel">
             <p><strong>Opis:</strong> Gotowy zestaw do rozpalenia ogniska – idealny dla każdego biwakowicza.</p>
             <p><strong>Specyfikacja:</strong></p>
             <ul class="specifications">
@@ -1140,7 +1172,7 @@
       <ul>
         <li>Pow. 700 punktów</li>
         <li>20% rabatu</li>
-        <li>Bezpłatna wysyłka</li>
+        <li>Bezpłatna wysyłka dla wszystkich zamówień</li>
       </ul>
     </div>
     <h3>Twój aktualny poziom: <span id="userLevel">Brązowy</span></h3>
@@ -1162,13 +1194,91 @@
       <button type="submit">Wyślij</button>
     </form>
   </section>
+  <!-- Regulamin -->
+<section id="terms" class="section">
+  <h2>Regulamin sklepu HowlGear</h2>
+  <p><strong>1. Postanowienia ogólne</strong><br>
+    1.1. Sklep internetowy HowlGear prowadzony jest przez HowlGearProjektUŁ, z siedzibą w Łodzi.<br>
+    1.2. Regulamin określa zasady korzystania ze sklepu internetowego oraz warunki zawierania i realizacji umów sprzedaży produktów.</p>
+
+  <p><strong>2. Zamówienia</strong><br>
+    2.1. Realizacja zamówienia następuje po jego potwierdzeniu.<br>
+    2.2. Ceny podane na stronie są cenami brutto w złotych polskich.</p>
+
+  <p><strong>3. Prawo odstąpienia od umowy</strong><br>
+    3.1. Konsument ma prawo odstąpić od umowy w terminie 14 dni bez podania przyczyny.<br>
+    3.2. Szczegółowe informacje znajdują się przy każdej realizowanej dostawie.</p>
+
+  <p><strong>4. Dane osobowe</strong><br>
+    4.1. Administratorem danych osobowych jest HowlGearProjektUŁ.<br>
+    4.2. Dane zbierane są w celu realizacji zamówienia oraz marketingu własnego.</p>
+</section>
+
+<!-- Polityka prywatności -->
+<section id="privacy" class="section">
+  <h2>Polityka prywatności</h2>
+  <p><strong>1. Administrator danych</strong><br>
+    Administratorem danych osobowych jest HowlGearProjektUŁ, z siedzibą w Łodzi.</p>
+
+  <p><strong>2. Zakres danych</strong><br>
+    Zebrane dane obejmują m.in.: imię i nazwisko, adres e-mail, numer telefonu, adres dostawy, historię zamówień.</p>
+
+  <p><strong>3. Cel przetwarzania</strong><br>
+    Dane przetwarzane są w celu realizacji zamówień, obsługi klienta oraz promocji usług (za Twoją zgodą).</p>
+
+  <p><strong>4. Prawa użytkownika</strong><br>
+    Masz prawo żądać dostępu do swoich danych, ich sprostowania, usunięcia lub ograniczenia przetwarzania.</p>
+</section>
+<!-- FAQ -->
+<section id="faq" class="section">
+  <h2>Najczęściej zadawane pytania</h2>
+
+  <details>
+    <summary><strong>Jak długo trwa dostawa?</strong></summary>
+    <p>Dostawa zajmuje od 2 do 5 dni roboczych, w zależności od wybranej opcji wysyłki.</p>
+  </details>
+
+  <details>
+    <summary><strong>Czy mogę zwrócić produkt?</strong></summary>
+    <p>Tak! Masz 14 dni na zwrot towaru od momentu otrzymania przesyłki. Produkt musi być nieużywany i w oryginalnym opakowaniu.</p>
+  </details>
+
+  <details>
+    <summary><strong>Jakie są opcje płatności?</strong></summary>
+    <p>Akceptujemy płatności kartą, przelewem bankowym, BLIK oraz płatność przy odbiorze.</p>
+  </details>
+
+  <details>
+    <summary><strong>Czy oferujecie gwarancję na produkty?</strong></summary>
+    <p>Tak, wszystkie nasze produkty objęte są standardową gwarancją producenta – 24 miesiące.</p>
+  </details>
+
+  <details>
+    <summary><strong>Jak śledzić status zamówienia?</strong></summary>
+    <p>Po wysyłce zamówienia otrzymasz e-mail z numerem przesyłki i linkiem do śledzenia paczki na stronie kuriera.</p>
+  </details>
+
+  <details>
+    <summary><strong>Czy można zmienić dane do zamówienia?</strong></summary>
+    <p>Jeśli zamówienie jeszcze nie zostało przekazane do realizacji, możesz je edytować kontaktując się z obsługą klienta.</p>
+  </details>
+
+  <details>
+    <summary><strong>Czy macie możliwość odbioru osobistego?</strong></summary>
+    <p>Tak, odbiór osobisty możliwy jest w siedzibie firmy po uprzednim ustaleniu terminu.</p>
+  </details>
+</section>
 </main>
 <!-- Ikony Social Media -->
 <div class="social-icons">
   <a href="https://www.instagram.com/howl_gear/profilecard/?igsh=em44OHN5dWFwYzA1 " target="_blank">📸 INSTAGRAM</a>
-  <a href="https://tiktok.com " target="_blank">🎵 TIKTOK</a>
 </div>
 <footer>
+  <div style="margin-bottom: 15px;">
+    <a href="#" onclick="showSection('terms')" style="color: #f9f9ef; text-decoration: underline; margin-right: 15px;">Regulamin</a>
+    <a href="#" onclick="showSection('privacy')" style="color: #f9f9ef; text-decoration: underline; margin-right: 15px;">Polityka prywatności</a>
+    <a href="#" onclick="showSection('faq')" style="color: #f9f9ef; text-decoration: underline;">FAQ</a>
+  </div>
   &copy; 2025 HowlGear - Wszelkie prawa zastrzeżone.
 </footer>
 <!-- Podsumowanie koszyka / ulubionych -->
@@ -1185,6 +1295,22 @@
 </div>
 
 <script>
+function removeFromWishlist(index) {
+  const removed = wishlist.splice(index, 1)[0]; // Usuwamy element
+  document.getElementById('wishlistCount').textContent = wishlist.length;
+
+  // Odznacz ikonkę ❤️ w kartach produktów
+  document.querySelectorAll('.product').forEach(product => {
+    if (product.dataset.name === removed) {
+      const favBtn = product.querySelector('.btn-fav');
+      if (favBtn) {
+        favBtn.classList.remove('liked');
+      }
+    }
+  });
+
+  toggleSummary('wishlist'); // Odśwież podgląd
+}
   let cart = [];
   let wishlist = [];
   let points = 0;
@@ -1304,43 +1430,49 @@
   }
 
   // Podsumowanie koszyka / ulubionych
-  function toggleSummary(type) {
-    const overlay = document.getElementById('summaryOverlay');
-    const title = document.getElementById('summaryTitle');
-    const list = document.getElementById('summaryList');
-    const total = document.getElementById('summaryTotal');
-    const empty = document.getElementById('summaryEmpty');
-    overlay.style.display = 'block';
-    if (type === 'cart') {
-      title.textContent = 'Twój koszyk:';
-      list.innerHTML = '';
-      total.textContent = `Razem: ${cart.reduce((sum, item) => sum + item.price * item.qty, 0)} zł`;
-      empty.style.display = cart.length === 0 ? 'block' : 'none';
-      cart.forEach((item, index) => {
-        const li = document.createElement('li');
-        li.innerHTML = `
-          <strong>${item.name}</strong> x${item.qty} (${item.price} zł)
-          <div class="quantity-controls">
-            <button onclick="changeQty(${index}, -1)">-</button>
-            <span>${item.qty}</span>
-            <button onclick="changeQty(${index}, 1)">+</button>
-          </div>
-        `;
-        list.appendChild(li);
-      });
-    } else if (type === 'wishlist') {
-      title.textContent = 'Ulubione:';
-      list.innerHTML = '';
-      total.textContent = `Ilość: ${wishlist.length}`;
-      empty.style.display = wishlist.length === 0 ? 'block' : 'none';
-      wishlist.forEach(name => {
-        const li = document.createElement('li');
-        li.textContent = name;
-        list.appendChild(li);
-      });
-    }
-  }
+function toggleSummary(type) {
+  const overlay = document.getElementById('summaryOverlay');
+  const title = document.getElementById('summaryTitle');
+  const list = document.getElementById('summaryList');
+  const total = document.getElementById('summaryTotal');
+  const empty = document.getElementById('summaryEmpty');
+  overlay.style.display = 'block';
 
+  if (type === 'cart') {
+    title.textContent = 'Twój koszyk:';
+    list.innerHTML = '';
+    total.textContent = `Razem: ${cart.reduce((sum, item) => sum + item.price * item.qty, 0)} zł`;
+    empty.style.display = cart.length === 0 ? 'block' : 'none';
+
+    cart.forEach((item, index) => {
+      const li = document.createElement('li');
+      li.innerHTML = `
+        <strong>${item.name}</strong> x${item.qty} (${item.price} zł)
+        <div class="quantity-controls">
+          <button onclick="changeQty(${index}, -1)">-</button>
+          <span>${item.qty}</span>
+          <button onclick="changeQty(${index}, 1)">+</button>
+        </div>
+      `;
+      list.appendChild(li);
+    });
+
+  } else if (type === 'wishlist') {
+    title.textContent = 'Ulubione:';
+    list.innerHTML = '';
+    total.textContent = `Ilość: ${wishlist.length}`;
+    empty.style.display = wishlist.length === 0 ? 'block' : 'none';
+
+    wishlist.forEach((name, index) => {
+      const li = document.createElement('li');
+      li.innerHTML = `
+        <span><strong>${name}</strong></span>
+        <button onclick="removeFromWishlist(${index})" style="background: #e53935; color: white; border: none; padding: 4px 8px; border-radius: 4px; margin-left: 10px;">Usuń</button>
+      `;
+      list.appendChild(li);
+    });
+  }
+}
   function changeQty(index, delta) {
     cart[index].qty += delta;
     if (cart[index].qty <= 0) {
@@ -1426,6 +1558,119 @@
   });
 
   window.onload = () => showSection('home');
+</script>
+<!-- Czatbot -->
+<div id="chatbotToggle" onclick="toggleChatbot()" style="position: fixed; bottom: 20px; right: 20px; z-index: 9999; background-color: #388e3c; color: white; border: none; padding: 15px; font-size: 16px; border-radius: 50%; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.2); display: block;">💬</div>
+
+<div id="chatbot" style="display:none; position: fixed; bottom: 80px; right: 20px; width: 320px; height: 400px; background-color: #fff; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); flex-direction: column; z-index: 9999; overflow: hidden;">
+<div class="chat-header" style="background-color: #388e3c; color: white; padding: 15px; display: flex; justify-content: space-between; align-items: center;">
+  <span>💬 Pomoc - HowlBot</span>
+  <button onclick="toggleChatbot()" style="background: none; border: none; color: white; font-size: 18px; cursor: pointer;">✖️</button>
+</div>
+  <div class="chat-body" id="chatBody" style="flex-grow: 1; padding: 15px; overflow-y: auto; background-color: #f7f7f7;"></div>
+  <div class="chat-input" style="display: flex; border-top: 1px solid #ccc; padding: 10px; background-color: #fff;">
+    <input type="text" id="chatInput" placeholder="Napisz wiadomość..." onkeypress="handleChatKeyPress(event)" style="flex: 1; padding: 10px; border: 1px solid #ccc; border-radius: 5px;" />
+    <button onclick="sendMessage()" style="margin-left: 10px; padding: 10px 15px; background-color: #7aa178; color: white; border: none; border-radius: 5px; cursor: pointer;">Wyślij</button>
+  </div>
+</div>
+
+<style>
+  .message {
+    margin-bottom: 10px;
+    max-width: 80%;
+    padding: 10px;
+    border-radius: 10px;
+    line-height: 1.4;
+  }
+  .message.user {
+    background-color: #dcedc8;
+    align-self: flex-end;
+    text-align: right;
+  }
+  .message.bot {
+    background-color: #e8f5e9;
+    align-self: flex-start;
+  }
+</style>
+
+<script>
+  const chatbot = document.getElementById('chatbot');
+  const chatbotToggle = document.getElementById('chatbotToggle');
+
+  function toggleChatbot() {
+    if (chatbot.style.display === 'flex') {
+      chatbot.style.display = 'none';
+      chatbotToggle.style.display = 'block';
+    } else {
+      chatbot.style.display = 'flex';
+      chatbotToggle.style.display = 'none';
+    }
+  }
+
+  function sendMessage() {
+    const input = document.getElementById('chatInput');
+    const message = input.value.trim();
+    if (!message) return;
+
+    addMessage(message, 'user');
+    input.value = '';
+    setTimeout(() => {
+      const response = getBotResponse(message);
+      addMessage(response, 'bot');
+    }, 600);
+  }
+
+  function handleChatKeyPress(e) {
+    if (e.key === 'Enter') {
+      sendMessage();
+    }
+  }
+
+  function addMessage(text, sender) {
+    const chatBody = document.getElementById('chatBody');
+    const msgDiv = document.createElement('div');
+    msgDiv.className = 'message ' + sender;
+    msgDiv.textContent = text;
+    chatBody.appendChild(msgDiv);
+    chatBody.scrollTop = chatBody.scrollHeight;
+  }
+
+  function getBotResponse(input) {
+    input = input.toLowerCase();
+
+    if (input.includes("regulamin") || input.includes("jak działa zakup")) {
+      return "Regulamin dostępny jest w sekcji „Regulamin” w stopce strony. Opisuje warunki realizacji zamówień i prawo odstąpienia.";
+    }
+    if (input.includes("zwrot") || input.includes("odstąpić") || input.includes("reklamacja")) {
+      return "Masz 14 dni na zwrot produktu w stanie nieużywanym. Wystarczy wysłać zgłoszenie na kontakt@howlgear.pl.";
+    }
+    if (input.includes("dostawa") || input.includes("kurier") || input.includes("czas dostawy")) {
+      return "Dostawa trwa od 2 do 5 dni roboczych. Możesz śledzić ją po otrzymaniu numeru przesyłki.";
+    }
+    if (input.includes("płatność") || input.includes("opcje płatności")) {
+      return "Akceptujemy płatności kartą, przelewem bankowym, BLIK oraz płatność przy odbiorze.";
+    }
+    if (input.includes("kontakt") || input.includes("telefon") || input.includes("email")) {
+      return "Skontaktuj się z nami przez formularz kontaktowy lub mailowo na kontakt@howlgear.pl.";
+    }
+    if (input.includes("faq") || input.includes("częste pytania")) {
+      showSection('faq');
+      return "Otwieram sekcję FAQ, gdzie znajdziesz najczęściej zadawane pytania.";
+    }
+    if (input.includes("program") && input.includes("lojalnościowy")) {
+      showSection('loyalty');
+      return "Otwieram informacje o programie lojalnościowym.";
+    }
+    if (input.includes("polityka prywatności") || input.includes("dane osobowe")) {
+      showSection('privacy');
+      return "Otwieram Politykę Prywatności.";
+    }
+    if (input.includes("hello") || input.includes("hej") || input.includes("witam")) {
+      return "Cześć! 😊 Jak mogę Ci pomóc?";
+    }
+
+    return "Nie rozumiem jeszcze tego pytania. Spróbuj zadać je inaczej lub skorzystaj z sekcji FAQ.";
+  }
 </script>
 </body>
 </html>
