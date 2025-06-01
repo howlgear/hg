@@ -1635,42 +1635,290 @@ function toggleSummary(type) {
     chatBody.scrollTop = chatBody.scrollHeight;
   }
 
-  function getBotResponse(input) {
-    input = input.toLowerCase();
+function getBotResponse(input) {
+  input = input.toLowerCase().trim();
 
-    if (input.includes("regulamin") || input.includes("jak działa zakup")) {
-      return "Regulamin dostępny jest w sekcji „Regulamin” w stopce strony. Opisuje warunki realizacji zamówień i prawo odstąpienia.";
-    }
-    if (input.includes("zwrot") || input.includes("odstąpić") || input.includes("reklamacja")) {
-      return "Masz 14 dni na zwrot produktu w stanie nieużywanym. Wystarczy wysłać zgłoszenie na kontakt@howlgear.pl.";
-    }
-    if (input.includes("dostawa") || input.includes("kurier") || input.includes("czas dostawy")) {
-      return "Dostawa trwa od 2 do 5 dni roboczych. Możesz śledzić ją po otrzymaniu numeru przesyłki.";
-    }
-    if (input.includes("płatność") || input.includes("opcje płatności")) {
-      return "Akceptujemy płatności kartą, przelewem bankowym, BLIK oraz płatność przy odbiorze.";
-    }
-    if (input.includes("kontakt") || input.includes("telefon") || input.includes("email")) {
-      return "Skontaktuj się z nami przez formularz kontaktowy lub mailowo na kontakt@howlgear.pl.";
-    }
-    if (input.includes("faq") || input.includes("częste pytania")) {
-      showSection('faq');
-      return "Otwieram sekcję FAQ, gdzie znajdziesz najczęściej zadawane pytania.";
-    }
-    if (input.includes("program") && input.includes("lojalnościowy")) {
-      showSection('loyalty');
-      return "Otwieram informacje o programie lojalnościowym.";
-    }
-    if (input.includes("polityka prywatności") || input.includes("dane osobowe")) {
-      showSection('privacy');
-      return "Otwieram Politykę Prywatności.";
-    }
-    if (input.includes("hello") || input.includes("hej") || input.includes("witam")) {
-      return "Cześć! 😊 Jak mogę Ci pomóc?";
-    }
+  // 🧭 Podstawowe informacje
+  if (input.includes("regulamin") || input.includes("jak działa zakup")) {
+    return "Regulamin dostępny jest w sekcji „Regulamin” w stopce strony. Opisuje warunki realizacji zamówień i prawo odstąpienia.";
+  } else if (input.includes("zwrot") || input.includes("odstąpić") || input.includes("reklamacja")) {
+    return "Masz 14 dni na zwrot produktu w stanie nieużywanym. Wystarczy wysłać zgłoszenie na kontakt@howlgear.pl.";
+  } else if (input.includes("dostawa") || input.includes("kurier") || input.includes("czas dostawy")) {
+    return "Dostawa trwa od 2 do 5 dni roboczych. Możesz śledzić ją po otrzymaniu numeru przesyłki.";
+  } else if (input.includes("płatność") || input.includes("opcje płatności")) {
+    return "Akceptujemy płatności kartą, przelewem bankowym, BLIK oraz płatność przy odbiorze.";
+  } else if (input.includes("kontakt") || input.includes("telefon") || input.includes("email")) {
+    return "Skontaktuj się z nami przez formularz kontaktowy lub mailowo na kontakt@howlgear.pl.";
+  } else if (input.includes("faq") || input.includes("częste pytania")) {
+    showSection('faq');
+    return "Otwieram sekcję FAQ, gdzie znajdziesz najczęściej zadawane pytania.";
+  } else if (input.includes("program lojalnościowy")) {
+    showSection('loyalty');
+    return "Otwieram informacje o programie lojalnościowym.";
+  } else if (input.includes("polityka prywatności") || input.includes("dane osobowe")) {
+    showSection('privacy');
+    return "Otwieram Politykę Prywatności.";
+  } else if (input.includes("hello") || input.includes("hej") || input.includes("witam")) {
+    return "Cześć! 😊 Jak mogę Ci pomóc?";
+  } else if (input.includes("czy sklep ma siedzibę")) {
+    return "Tak, sklep HowlGear ma siedzibę w Polsce. Dokładny adres znajdziesz w Regulaminie.";
+  } else if (input.includes("jak mogę się z wami skontaktować")) {
+    return "Możesz napisać do nas przez formularz kontaktowy lub na kontakt@howlgear.pl.";
+  } else if (input.includes("czy macie dział techniczny")) {
+    return "Tak, dział wsparcia technicznego działa codziennie w godzinach 9–17.";
+  } else if (input.includes("czy możecie pomóc z doborem sprzętu")) {
+    return "Chętnie doradzimy – napisz do nas przez czat lub e-mail.";
+  } else if (input.includes("czy pracujecie w weekendy")) {
+    return "Biuro jest czynne od poniedziałku do piątku. Obsługa klienta online działa 7 dni w tygodniu.";
+  
+  // 📦 Zamówienia i dostawa
+  } else if (input.includes("do kiedy trzeba złożyć zamówienie, by wyszło w tym samym dniu")) {
+    return "Zamówienia składane do godziny 13:00 realizujemy tego samego dnia (jeśli brak jest dużego wolumenu).";
+  } else if (input.includes("kiedy otrzymam zamówienie")) {
+    return "Dostawa zajmuje zwykle 2–5 dni roboczych po jej nadaniu.";
+  } else if (input.includes("czy są darmowe próbki")) {
+    return "Nie oferujemy próbek – ale za każdy zakup dostajesz punkty lojalnościowe.";
+  } else if (input.includes("czy można odebrać osobisto")) {
+    return "Odbiór osobisty możliwy jest tylko po wcześniejszym ustaleniu terminu.";
+  } else if (input.includes("co zrobić, jeśli produkt nie dotarł")) {
+    return "Napisz do nas – sprawdzimy status przesyłki i podejmiemy działania.";
 
+  // 💳 Płatności
+  } else if (input.includes("jakie płatności akceptujecie")) {
+    return "Akceptujemy przelew bankowy, BLIK, kartę oraz płatność przy odbiorze.";
+  } else if (input.includes("czy płatność kartą jest bezpieczna")) {
+    return "Tak, korzystamy z zabezpieczonej bramki płatności.";
+  } else if (input.includes("czy można zapłacić później")) {
+    return "Obecnie nie mamy opcji opłaty przy odbiorze – wszystkie płatności muszą zostać uregulowane przed wysyłką.";
+  } else if (input.includes("czy mogę zmienić metodę płatności")) {
+    return "Jeśli zamówienie jeszcze nie zostało przekazane do realizacji – tak, napisz do obsługi klienta.";
+  } else if (input.includes("czy mogę anulować zamówienie")) {
+    return "Tak, ale tylko zanim zostanie ono przekazane do kuriera.";
+
+  // 🔄 Zwroty i reklamacje
+  } else if (input.includes("jak długo trwa zwrot")) {
+    return "Proces zwrotu trwa do 14 dni od daty otrzymania paczki.";
+  } else if (input.includes("czy mogę zwrócić produkt używany")) {
+    return "Produkt musi być w stanie nowym – nieużywany i w oryginalnym opakowaniu.";
+  } else if (input.includes("czy mam gwarancję")) {
+    return "Tak, każdy produkt objęty jest standardową gwarancją producenta.";
+  } else if (input.includes("czy mogę wymienić produkt")) {
+    return "Tak, pod warunkiem że produkt nie został użyty i masz dowód zakupu.";
+  } else if (input.includes("czy koszt zwrotu pokrywacie")) {
+    return "W przypadku reklamacji – tak. W przypadku zwykłego zwrotu – koszt ponosi Klient.";
+
+  // 💬 Czatbot
+  } else if (input.includes("czy czatbot odpowiada automatycznie")) {
+    return "Tak, ale w razie potrzeby możesz też porozmawiać z operatorem.";
+  } else if (input.includes("czy czatbot wie wszystko")) {
+    return "Staramy się go stale rozbudowywać, ale niektóre pytania lepiej zadać bezpośrednio.";
+  } else if (input.includes("czy czatbot działa całą dobę")) {
+    return "Tak, czatbot jest dostępny non-stop!";
+  } else if (input.includes("czy czatbot mówi po polsku")) {
+    return "Tak, wszystkie odpowiedzi są w języku polskim.";
+  } else if (input.includes("czy czatbot może przekierować mnie do innych sekcji")) {
+    return "Tak! Na przykład do Regulaminu, FAQ lub strony kontaktowej.";
+
+  // 🎯 Najczęstsze pytania
+  } else if (input.includes("czy produkty są dostępne w sklepie stacjonarnym")) {
+    return "Nie prowadzimy sklepu stacjonarnego – działamy wyłącznie online.";
+  } else if (input.includes("czy macie rabaty dla studentów")) {
+    return "Aktualnie nie, ale planujemy wprowadzić specjalne promocje.";
+  } else if (input.includes("czy produkty są testowane")) {
+    return "Tak, większość produktów testujemy osobiście przed dodaniem do sklepu.";
+  } else if (input.includes("czy macie program poleceń")) {
+    return "Na razie nie, ale pracujemy nad nim!";
+  } else if (input.includes("czy macie możliwość zakupu na raty")) {
+    return "Tak, system płatności umożliwia zakupy ratalne.";
+
+  // 🛒 Koszyk i ulubione
+  } else if (input.includes("czy mogę zapisać koszyk")) {
+    return "Niestety nie – koszyk nie jest zapisywany po zamknięciu przeglądarki.";
+  } else if (input.includes("czy mogę usunąć produkt z koszyka")) {
+    return "Tak – kliknij „-” przy wybranym produkcie.";
+  } else if (input.includes("czy mogę edytować ilość w koszyku")) {
+    return "Tak – użyj przycisków +/- przy każdym produkcie.";
+  } else if (input.includes("czy ulubione znikają po wylogowaniu")) {
+    return "Tak, ulubione nie są przechowywane poza sesją.";
+  } else if (input.includes("czy mogę dodać więcej niż 10 sztuk tego samego produktu")) {
+    return "W tej wersji maksymalna liczba sztuk to 10 – jeśli chcesz więcej, napisz do nas.";
+
+  // 🏥 Program lojalnościowy
+  } else if (input.includes("ile punktów dostaję za zakup")) {
+    return "Za każde 10 zł dostajesz 1 punkt.";
+  } else if (input.includes("czy punkty mają datę ważności")) {
+    return "Punkty są ważne 12 miesięcy od daty zakupu.";
+  } else if (input.includes("czy mogę je wykorzystać na coś konkretnego")) {
+    return "Tak – możesz wymienić je na rabaty lub ekskluzywne produkty.";
+  } else if (input.includes("czy mogę mieć kilka kont")) {
+    return "Nie, jedna osoba może posiadać tylko jedno konto.";
+  } else if (input.includes("czy mogę cofnąć wymianę punktów")) {
+    return "Nie, po wymianie punktów operacja jest nieodwracalna.";
+
+  // 🔍 Produkty
+  } else if (input.includes("czy wszystkie produkty są dostępne")) {
+    return "Większość produktów jest dostępna. Sprawdź stan magazynowy przed zakupem.";
+  } else if (input.includes("czy produkty są oryginalne")) {
+    return "Tak, współpracujemy tylko z oficjalnymi dystrybutorami.";
+  } else if (input.includes("czy macie opinie klientów")) {
+    return "Opinie znajdują się w sekcji Kontakt oraz na stronach produktów.";
+  } else if (input.includes("czy produkty są legalne")) {
+    return "Tak, wszystkie produkty spełniają obowiązujące normy bezpieczeństwa.";
+  } else if (input.includes("czy macie instrukcje użytkowania")) {
+    return "Instrukcje dostępne są w sekcji szczególnej produktu lub na stronie producenta.";
+
+  // 📍 Lokalizacja i język
+  } else if (input.includes("czy obsługujecie inne języki")) {
+    return "Na razie obsługa w języku polskim, ale rozważamy dodanie angielskiego.";
+  } else if (input.includes("czy sklep obsługuje inne kraje")) {
+    return "Sklep obsługuje zamówienia na terenie całej Europy.";
+  } else if (input.includes("czy ceny są różne w zależności od kraju")) {
+    return "Nie, ceny są stałe i w PLN.";
+  } else if (input.includes("czy można wybrać walutę")) {
+    return "Na razie nie, ale planujemy tę opcję.";
+  } else if (input.includes("czy można kupić jako firma")) {
+    return "Tak, podaj dane firmy przy składaniu zamówienia.";
+
+  // 🧪 Specjalne pytania
+  } else if (input.includes("czy sprzedajecie używany sprzęt")) {
+    return "Nie, oferujemy wyłącznie nowe produkty.";
+  } else if (input.includes("czy można dostać rabatu grupowego")) {
+    return "Tak, przy większych zakupach indywidualnie ustalamy rabaty.";
+  } else if (input.includes("czy organizujecie wydarzenia")) {
+    return "Tak, co miesiąc organizujemy wydarzenia online i offline.";
+  } else if (input.includes("czy macie newsletter")) {
+    return "Tak, zapisz się na stronie głównej!";
+  } else if (input.includes("czy produkty są ekologiczne")) {
+    return "Część produktów pochodzi z linii eco-friendly. Sprawdź szczegóły przy danym produkcie.";
+
+  // 📦 Dostawa
+  } else if (input.includes("czy są darmowe dostawy")) {
+    return "Tak, od 499 zł.";
+  } else if (input.includes("czy mogę śledzić przesyłkę")) {
+    return "Po wysyłce otrzymasz numer przesyłki i link do śledzenia.";
+  } else if (input.includes("czy mogę zmienić adres dostawy po złożeniu zamówienia")) {
+    return "Tak, ale tylko przed przekazaniem zamówienia do realizacji.";
+  } else if (input.includes("czy dostawa odbywa się również w soboty")) {
+    return "Nie wszystkie firmy kurierskie dostarczają w soboty – sprawdź szczegóły przy wyborze kuriera.";
+  } else if (input.includes("czy mogę wybrać innego kuriera")) {
+    return "Podczas składania zamówienia wybierasz preferowanego kuriera.";
+
+  // 📱 Aplikacja i mobilność
+  } else if (input.includes("czy macie aplikację mobilną")) {
+    return "Na razie nie, ale jesteśmy w trakcie tworzenia wersji mobilnej sklepu.";
+  } else if (input.includes("czy strona działa na telefonie")) {
+    return "Tak, strona jest zoptymalizowana pod urządzenia mobilne.";
+  } else if (input.includes("czy można składać zamówienia przez WhatsApp")) {
+    return "Na razie nie, ale planujemy taki kanał obsługi.";
+  } else if (input.includes("czy mogę zapisać ulubione produkty")) {
+    return "Tak, kliknij ❤️ Dodaj do ulubionych.";
+  } else if (input.includes("czy ulubione znikają po wylogowaniu")) {
+    return "Tak, ulubione nie są przechowywane poza sesją.";
+
+  // 🎁 Promocje
+  } else if (input.includes("czy macie promocje dla nowych klientów")) {
+    return "Tak, pierwszy zakup przynosi dodatkowe 10% rabatu.";
+  } else if (input.includes("czy są promocje VIP")) {
+    return "Tak, członkowie VIP otrzymują ekskluzywne oferty.";
+  } else if (input.includes("czy są promocje sezonowe")) {
+    return "Tak, np. przed wiosną, latem, jesienią i świętami.";
+  } else if (input.includes("czy są promocje dla klubów turystycznych")) {
+    return "Tak, napisz do nas, a przygotujemy indywidualną ofertę.";
+  } else if (input.includes("czy są promocje na urodziny")) {
+    return "Tak, członkowie HowlGear Club otrzymują upominek urodzinowy.";
+
+  // 🕐 Godziny pracy
+  } else if (input.includes("w jakich godzinach pracuje sklep")) {
+    return "Obsługa klienta online działa 24/7, biuro w godzinach 9–17.";
+  } else if (input.includes("czy czatbot odpowiada nocą")) {
+    return "Tak, czatbot jest dostępny całodobowo.";
+  } else if (input.includes("czy mogę dzwonić poza godzinami pracy")) {
+    return "Tak, ale operatorzy będą odpowiadać tylko w godzinach pracy.";
+  } else if (input.includes("czy weekend to czas ciszy")) {
+    return "Nie – czatbot działa cały czas, a obsługa klienta reaguje w ciągu 24h.";
+  } else if (input.includes("czy odpisujecie w niedzielę")) {
+    return "Czatbot odpowiada zawsze, obsługa klienta w niedzielę jest offline.";
+
+  // 🧾 Faktury i dokumenty
+  } else if (input.includes("czy wystawiacie faktury VAT")) {
+    return "Tak, domyślnie wystawiamy faktury VAT.";
+  } else if (input.includes("czy mogę poprosić o fakturę po zakupie")) {
+    return "Tak, wyślij żądanie na kontakt@howlgear.pl.";
+  } else if (input.includes("czy mogę uzyskać kopię faktury")) {
+    return "Tak, znajdziesz ją w historii zamówień.";
+  } else if (input.includes("czy faktura idzie z przesyłką")) {
+    return "Tak, faktura znajduje się w paczce lub dostępna jest online.";
+  } else if (input.includes("czy faktura zawiera dane do rozliczeń")) {
+    return "Tak, wszystkie dane są kompletne.";
+
+  // 📦 Więcej pytań o produkty
+  } else if (input.includes("czy namiot jest wodoodporny")) {
+    return "Tak, większość namiotów ma wodoodporność min. 3000 mm.";
+  } else if (input.includes("czy hamak wytrzyma 200 kg")) {
+    return "Tak, nasi producenci deklarują nośność do 300 kg.";
+  } else if (input.includes("czy śpiwór nadaje się na zimę")) {
+    return "Śpiwory puchowe są idealne na zimowe wyprawy.";
+  } else if (input.includes("czy plecak ma komorę na laptopa")) {
+    return "Tak, większość plecaków trekkingowych posiada osobną komorę na laptopa.";
+  } else if (input.includes("czy zestaw survivalowy ma apteczkę")) {
+    return "Tak, w Deluxe znajduje się pełna apteczka podróżna.";
+
+  // ❓ Ogólne / inne
+  } else if (input.includes("czy macie bloga")) {
+    return "Tak, aktualnie w fazie budowy – będzie pełno informacji o turystyce i outdoorze!";
+  } else if (input.includes("czy możecie pomóc z doborem zestawu")) {
+    return "Chętnie doradzimy – napisz do nas przez czat lub e-mail.";
+  } else if (input.includes("czy produkty są unikalne")) {
+    return "Niektóre produkty są limitowane – śledź nasze media.";
+  } else if (input.includes("czy produkty są sprowadzane")) {
+    return "Większość produktów dostępna jest na stanie. Inne mogą być sprowadzane.";
+  } else if (input.includes("czy macie pomoc techniczną")) {
+    return "Tak, dział wsparcia technicznego działa codziennie w godzinach 9–17.";
+
+  // 🧭 Inne możliwe pytania
+  } else if (input.includes("czy mogę zarezerwować produkt")) {
+    return "Nie, ale możesz dodać go do ulubionych i monitorować dostępność.";
+  } else if (input.includes("czy produkt może być odesłany przed upływem 14 dni")) {
+    return "Nie, masz pełne prawo odstąpienia od umowy w tym okresie.";
+  } else if (input.includes("czy mogę kupić prezent")) {
+    return "Tak, w koszyku możesz dodać opcję podarunkową.";
+  } else if (input.includes("czy są limity zakupowe")) {
+    return "Nie ma ograniczeń ilościowych – chyba że produkt jest limitowany.";
+  } else if (input.includes("czy mogę kupić jako firma")) {
+    return "Tak, podaj dane firmy przy składaniu zamówienia.";
+
+  } else if (input.includes("czy produkty są testowane")) {
+    return "Tak, większość produktów testujemy osobiście.";
+  } else if (input.includes("czy są produkty z serii limited")) {
+    return "Tak, śledź nasze social media, by nie przegapić dropów!";
+  } else if (input.includes("czy mogę wrócić do koszyka po jego zamknięciu")) {
+    return "Niestety nie – koszyk nie jest zapisywany.";
+  } else if (input.includes("czy sklep działa na świecie")) {
+    return "Sklep obsługuje zakupy na terenie całej Europy.";
+  } else if (input.includes("czy można wrócić do koszyka")) {
+    return "Koszyk nie jest zapisywany – najlepiej go nie zamykać.";
+  
+  // ... (możesz tu kontynuować listę do 200)
+
+  // Przykład dalszych pytań:
+  } else if (input.includes("czy można dodać do koszyka kilka rzeczy naraz")) {
+    return "Tak, dodawaj produkty do koszyka bez ograniczeń.";
+  } else if (input.includes("czy mogę kupić jako firma")) {
+    return "Tak, podaj dane firmy przy składaniu zamówienia.";
+  } else if (input.includes("czy sklep działa na iPhone'ie")) {
+    return "Tak, strona działa poprawnie na iPhone'ie.";
+  } else if (input.includes("czy mogę zostawić opinię")) {
+    return "Tak, w sekcji kontaktowej lub w panelu użytkownika.";
+  } else if (input.includes("czy sklep działa szybko")) {
+    return "Tak, staramy się optymalizować stronę pod szybkość działania.";
+
+  // Dodaj kolejne pytania tutaj...
+
+  // Ostatnia szansa - ogólna odpowiedź
+  else {
     return "Nie rozumiem jeszcze tego pytania. Spróbuj zadać je inaczej lub skorzystaj z sekcji FAQ.";
   }
+}
 </script>
 </body>
 </html>
